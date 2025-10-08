@@ -13,8 +13,10 @@ const Layouts = ({
   return (
     <>
       {isHeader && <Header />}
-      {children}
-      {isFooter && <Footer />}
+      <div className="">
+        {children}
+        {isFooter && <Footer />}
+      </div>
     </>
   );
 };

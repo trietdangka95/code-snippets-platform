@@ -17,13 +17,28 @@ const Button = ({
 }: ButtonProps) => {
   const base = "px-4 py-2 rounded font-medium transition focus:outline-none";
   const variants = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
+    primary: "bg-blue-500 text-white hover:bg-blue-700",
     secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300",
     outline: "border border-gray-300 text-gray-700 hover:bg-gray-50",
   };
 
+  const types = {
+    button: "px-4 py-2 rounded font-medium transition focus:outline-none",
+    submit: "px-4 py-2 rounded font-medium transition focus:outline-none",
+    reset: "px-4 py-2 rounded font-medium transition focus:outline-none",
+  };
+
   return (
-    <button {...props} className={clsx(base, variants[variant], className)}>
+    <button
+      {...props}
+      className={clsx(
+        base,
+        variants[variant],
+        types[props.type ?? "button"],
+        "cursor-pointer",
+        className
+      )}
+    >
       {children}
     </button>
   );
