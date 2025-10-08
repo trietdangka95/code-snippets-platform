@@ -10,14 +10,14 @@ import { Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 interface Inputs {
-  title: string;
+  topic: string;
   language: string;
   tags: string;
   code: string;
 }
 const schema = yup
   .object({
-    title: yup.string().required("Title is required"),
+    topic: yup.string().required("Topic is required"),
     language: yup.string().required("Language is required"),
     tags: yup.string().required("Tags is required"),
     code: yup.string().required("Code is required"),
@@ -32,29 +32,21 @@ const SnippetCreatePage = () => {
     control,
     formState: { errors },
     clearErrors,
-    watch,
   } = useForm<Inputs>({
     resolver: yupResolver(schema),
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
-      title: "",
-      language: "JavaScript", // Set default to first option
+      topic: "",
+      language: "JavaScript",
       tags: "",
       code: "",
     },
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log("Form submitted with data:", data);
-    console.log("Language value:", data.language);
-  };
-
-  // Debug current form values
-  const currentValues = watch();
-  console.log("Current form values:", currentValues);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {};
 
   return (
-    <aside className="rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 h-max md:sticky md:top-24 backdrop-blur-sm">
+    <aside className="rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 h-max backdrop-blur-sm">
       <div className="mb-8">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2">
           Add Snippet
@@ -67,14 +59,14 @@ const SnippetCreatePage = () => {
         <div className="group">
           <Controller
             control={control}
-            name="title"
+            name="topic"
             render={({ field }) => (
               <div className="relative">
                 <Input
-                  label="Title"
-                  placeholder="Enter a descriptive title"
-                  error={errors.title?.message}
-                  onClearError={() => clearErrors("title")}
+                  label="Topic"
+                  placeholder="Enter a descriptive topic"
+                  error={errors.topic?.message}
+                  onClearError={() => clearErrors("topic")}
                   className="group-hover:shadow-md transition-all duration-200"
                   {...field}
                 />

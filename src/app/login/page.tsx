@@ -1,16 +1,14 @@
 "use client";
 import Button from "@/components/ui/Button";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
   const router = useRouter();
   const handleNavigateToHome = () => {
+    document.cookie = "token=1234567890; path=/; max-age=86400"; // 24 hours
     router.push("/");
   };
-  const loginWithGoogle = () => {
-    console.log("TODO login with google");
-  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
