@@ -4,7 +4,7 @@ import { extractUserId } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
-    const { title, description, code, languageName, topics } = await req.json();
+    const { title, code, languageName, topics } = await req.json();
 
     const userId = extractUserId(req);
     if (!userId) {
@@ -23,7 +23,6 @@ export async function POST(req: Request) {
     const snippet = await prisma.snippet.create({
       data: {
         title,
-        description,
         code,
         user: { connect: { id: userId } },
         language: { connect: { id: language.id } },
@@ -59,7 +58,7 @@ export async function POST(req: Request) {
   }
 }
 
-// GET /api/snippets?description=&languageId=&topicId=
+// GET /api/snippets?languageId=&topicId=
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
@@ -71,7 +70,11 @@ export async function GET(req: Request) {
         ...(languageId ? { languageId } : {}),
         ...(topicId ? { topics: { some: { topicId } } } : {}),
       },
-      include: { language: true, topics: { include: { topic: true } } },
+      include: {
+        user: true,
+        language: true,
+        topics: { include: { topic: true } },
+      },
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json({ snippets });

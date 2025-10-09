@@ -24,24 +24,75 @@ export async function PUT(
     title?: string;
     code?: string;
     language?: string;
-    topic?: string;
-    tags?: string | string[];
+    topics?: string;
   } = await req.json();
-  const { title, code, language, topic, tags } = body;
-  const tagsText: string | undefined =
-    typeof tags === "string"
-      ? tags
-      : Array.isArray(tags)
-      ? (tags as string[]).join(", ")
-      : undefined;
+  const { title, code, language, topics } = body;
+  // Ensure only owner can update
+  const existing = await prisma.snippet.findUnique({ where: { id } });
+  if (!existing) {
+    return NextResponse.json({ error: "Snippet not found" }, { status: 404 });
+  }
+  if (existing.userId !== userId) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  // Handle language update
+  let languageId = existing.languageId;
+  if (language) {
+    let languageRecord = await prisma.language.findUnique({
+      where: { name: language },
+    });
+    if (!languageRecord) {
+      languageRecord = await prisma.language.create({
+        data: { name: language },
+      });
+    }
+    languageId = languageRecord.id;
+  }
+
+  // Handle topics update
+  if (topics !== undefined) {
+    // Delete existing topic relationships
+    await prisma.snippetTopic.deleteMany({
+      where: { snippetId: id },
+    });
+
+    // Add new topic relationships
+    if (topics && topics.length > 0) {
+      const topicNames = topics
+        .split(",")
+        .map((t: string) => t.trim())
+        .filter(Boolean);
+      for (const topicName of topicNames) {
+        let topic = await prisma.topic.findUnique({
+          where: { name: topicName },
+        });
+        if (!topic) {
+          topic = await prisma.topic.create({
+            data: { name: topicName },
+          });
+        }
+
+        await prisma.snippetTopic.create({
+          data: {
+            snippetId: id,
+            topicId: topic.id,
+          },
+        });
+      }
+    }
+  }
+
   const updated = await prisma.snippet.update({
     where: { id },
     data: {
       title,
       code,
-      ...(language ? { language } : {}),
-      ...(topic ? { topic } : {}),
-      tags: tagsText,
+      ...(languageId !== existing.languageId ? { languageId } : {}),
+    },
+    include: {
+      user: true,
+      language: true,
+      topics: { include: { topic: true } },
     },
   });
   return NextResponse.json({ snippet: updated });
@@ -52,7 +103,14 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const id = params.id;
-  const snippet = await prisma.snippet.findUnique({ where: { id } });
+  const snippet = await prisma.snippet.findUnique({
+    where: { id },
+    include: {
+      user: true,
+      language: true,
+      topics: { include: { topic: true } },
+    },
+  });
   if (!snippet) {
     return NextResponse.json({ error: "Snippet not found" }, { status: 404 });
   }
@@ -77,6 +135,9 @@ export async function DELETE(
     return NextResponse.json({ error: "Invalid user" }, { status: 401 });
   }
 
-  await prisma.snippet.delete({ where: { id } });
+  await prisma.$transaction([
+    prisma.snippetTopic.deleteMany({ where: { snippetId: id } }),
+    prisma.snippet.delete({ where: { id } }),
+  ]);
   return NextResponse.json({ ok: true });
 }

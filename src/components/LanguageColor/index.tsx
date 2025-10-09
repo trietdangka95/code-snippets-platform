@@ -20,7 +20,7 @@ const LanguageTagColor = ({ language }: { language: string }) => {
     CSS: "bg-yellow-100 text-yellow-700",
   };
   return (
-    <div className="flex flex-wrap items-center gap-2 mb-4">
+    <div className="flex flex-wrap items-center gap-2">
       <span
         className={`px-3 py-1 ${
           languageColor[language as keyof typeof languageColor]

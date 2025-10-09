@@ -5,6 +5,8 @@ import { useToast } from "@/hooks/useToast";
 import LanguageColor from "../LanguageColor";
 import UITag from "../UITag";
 import { InlineSpinner } from "../ui/Loading";
+import Button from "../ui/Button";
+import { analyzeComplexity } from "@/lib/complexity";
 
 type ApiSnippet = {
   id: string;
@@ -13,6 +15,7 @@ type ApiSnippet = {
   language?: { id: string; name: string } | null;
   topics?: { topic: { id: string; name: string } }[];
   createdAt: string;
+  user?: { id: string; name: string | null } | null;
 };
 
 const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
@@ -49,9 +52,33 @@ const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
         typeof window !== "undefined" ? window.location.origin : "";
       const url = `${origin}/snippets/${id}`;
       await navigator.clipboard.writeText(url);
-      success("Đã copy liên kết snippet");
+      success("Copied snippet link");
     } catch {
-      error("Copy không thành công");
+      error("Copy failed");
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(`/api/snippets/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (res.ok && data?.ok) {
+        setSnippets((prev) => prev.filter((s) => s.id !== id));
+        success("Deleted snippet");
+      } else {
+        error(data?.error || "Delete failed");
+      }
+    } catch {
+      error("Delete failed");
+    }
+  };
+
+  const handleConfirmDelete = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this snippet?")) {
+      handleDelete(id);
     }
   };
 
@@ -94,8 +121,16 @@ const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
                   </h3>
                 </div>
               </div>
-
-              <div className="flex items-center justify-between gap-2 text-sm text-gray-500">
+              <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                <p>Created By:</p>
+                <Link
+                  href={`/u/${snip.user?.id ?? ""}`}
+                  className="hover:underline text-blue-700"
+                >
+                  {snip.user?.name || "Unknown"}
+                </Link>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                 <p>Programming Language:</p>
                 <Link
                   href={`/tags/language/${snip.language?.id ?? ""}`}
@@ -104,7 +139,7 @@ const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
                   <LanguageColor language={snip.language?.name || "Unknown"} />
                 </Link>
               </div>
-              <div className="flex items-center justify-between gap-2 text-sm text-gray-500 mb-2">
+              <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                 <p>Topics:</p>
                 <div className="flex flex-wrap gap-2">
                   {(snip.topics || []).length === 0 ? (
@@ -122,9 +157,15 @@ const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
                   )}
                 </div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-4 mb-4 font-mono text-sm">
+
+              <div className="bg-gray-100 rounded-xl p-4 mb-4 font-mono text-sm">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-gray-500">Code Preview</span>
+                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-semibold">
+                      Complexity: {analyzeComplexity(snip.code)}
+                    </span>
+                  </div>
                 </div>
                 <div className="space-y-1">
                   <pre className="whitespace-pre-wrap break-words text-gray-800">
@@ -136,7 +177,34 @@ const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
 
               <div className="flex justify-end">
                 <div className="flex items-center gap-2">
-                  <button
+                  <Link
+                    href={`/snippets/${snip.id}`}
+                    className="px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium"
+                  >
+                    <span className="flex items-center gap-1">
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                      View
+                    </span>
+                  </Link>
+                  <Button
                     type="button"
                     className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium"
                     onClick={() => handleCopy(snip.id)}
@@ -157,10 +225,11 @@ const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
                       </svg>
                       Copy link
                     </span>
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
-                    className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium"
+                    className="px-4 py-2 bg-red-400 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium"
+                    onClick={() => handleConfirmDelete(snip.id)}
                   >
                     <span className="flex items-center gap-1">
                       <svg
@@ -178,7 +247,7 @@ const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
                       </svg>
                       Delete
                     </span>
-                  </button>
+                  </Button>
                 </div>
               </div>
             </li>

@@ -2,10 +2,36 @@
 import Link from "next/link";
 import Button from "../ui/Button";
 import { useRouter, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const [currentUser, setCurrentUser] = useState<{
+    id: string;
+    name?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    const loadMe = async () => {
+      try {
+        const res = await fetch("/api/auth/me", {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) return;
+        if (active) setCurrentUser(data?.user ?? null);
+      } catch {
+        // ignore
+      }
+    };
+    loadMe();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleLogout = async () => {
     const res = await fetch("/api/auth/logout", {
@@ -61,6 +87,27 @@ const Header = () => {
                 ></span>
               </Link>
             </li>
+            {currentUser?.id ? (
+              <li>
+                <Link
+                  href={`/u/${currentUser.id}`}
+                  className={`text-sm font-medium transition-colors duration-200 relative group ${
+                    pathname === `/u/${currentUser.id}`
+                      ? "text-blue-600"
+                      : "text-gray-700 hover:text-blue-600"
+                  }`}
+                >
+                  My Profile
+                  <span
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-200 ${
+                      pathname === `/u/${currentUser.id}`
+                        ? "w-full"
+                        : "w-0 group-hover:w-full"
+                    }`}
+                  ></span>
+                </Link>
+              </li>
+            ) : null}
             <li>
               <Link
                 href="/about"
@@ -80,12 +127,29 @@ const Header = () => {
             </li>
             <li className="h-8 w-px bg-gray-300"></li>
 
-            <li className="flex items-center gap-2">
-              <p className="text-sm font-medium text-gray-700">Hello Admin,</p>
-              <Button variant="outline" onClick={handleLogout}>
-                Logout
-              </Button>
-            </li>
+            {currentUser ? (
+              <li className="flex items-center gap-2">
+                <p className="text-sm font-medium text-gray-700">
+                  Hello {currentUser.name || "User"},
+                </p>
+                <Button variant="outline" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </li>
+            ) : (
+              <li>
+                <Link
+                  href="/login"
+                  className={`text-sm font-medium transition-colors duration-200 relative group ${
+                    pathname === "/login"
+                      ? "text-blue-600"
+                      : "text-gray-700 hover:text-blue-600"
+                  }`}
+                >
+                  Login
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       </div>

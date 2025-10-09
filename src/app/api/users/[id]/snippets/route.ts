@@ -7,12 +7,19 @@ export async function GET(
 ) {
   try {
     const userId = params.id;
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, name: true },
+    });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
     const snippets = await prisma.snippet.findMany({
       where: { userId },
       include: { language: true, topics: { include: { topic: true } } },
       orderBy: { createdAt: "desc" },
     });
-    return NextResponse.json({ snippets });
+    return NextResponse.json({ user, snippets });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
