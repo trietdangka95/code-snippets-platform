@@ -3,10 +3,13 @@ import Link from "next/link";
 import Button from "../ui/Button";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("navigation");
   const [currentUser, setCurrentUser] = useState<{
     id: string;
     name?: string;
@@ -79,7 +82,7 @@ const Header = () => {
                     : "text-gray-700 hover:text-blue-600"
                 }`}
               >
-                Home
+                {t("home")}
                 <span
                   className={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-200 ${
                     pathname === "/" ? "w-full" : "w-0 group-hover:w-full"
@@ -97,7 +100,7 @@ const Header = () => {
                       : "text-gray-700 hover:text-blue-600"
                   }`}
                 >
-                  My Profile
+                  {t("myProfile")}
                   <span
                     className={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-200 ${
                       pathname === `/u/${currentUser.id}`
@@ -117,7 +120,7 @@ const Header = () => {
                     : "text-gray-700 hover:text-blue-600"
                 }`}
               >
-                About
+                {t("about")}
                 <span
                   className={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-200 ${
                     pathname === "/about" ? "w-full" : "w-0 group-hover:w-full"
@@ -126,14 +129,18 @@ const Header = () => {
               </Link>
             </li>
             <li className="h-8 w-px bg-gray-300"></li>
+            <li>
+              <LanguageSwitcher />
+            </li>
+            <li className="h-8 w-px bg-gray-300"></li>
 
             {currentUser ? (
               <li className="flex items-center gap-2">
                 <p className="text-sm font-medium text-gray-700">
-                  Hello {currentUser.name || "User"},
+                  {t("hello")} {currentUser.name || t("user")},
                 </p>
                 <Button variant="outline" onClick={handleLogout}>
-                  Logout
+                  {t("logout")}
                 </Button>
               </li>
             ) : (
@@ -146,7 +153,7 @@ const Header = () => {
                       : "text-gray-700 hover:text-blue-600"
                   }`}
                 >
-                  Login
+                  {t("login")}
                 </Link>
               </li>
             )}

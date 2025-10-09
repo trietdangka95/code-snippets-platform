@@ -1,5 +1,6 @@
 // Link not used in this page
 import { headers } from "next/headers";
+import { Metadata } from "next";
 import LanguageColor from "@/components/LanguageColor";
 import SnippetMeta from "@/components/SnippetMeta";
 
@@ -26,6 +27,44 @@ async function fetchByLanguage(
   });
   if (!res.ok) return { snippets: [] } as { snippets: ApiSnippet[] };
   return res.json() as Promise<{ snippets: ApiSnippet[] }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const data = await fetchByLanguage(params.id);
+  const snippets = data.snippets ?? [];
+  const languageName = snippets[0]?.language?.name ?? "Unknown Language";
+  const snippetCount = snippets.length;
+
+  return {
+    title: `${languageName} Code Snippets`,
+    description: `Browse ${snippetCount} code snippets in ${languageName}. Find examples, tutorials, and solutions for ${languageName} programming.`,
+    keywords: [
+      languageName,
+      `${languageName} code snippets`,
+      `${languageName} examples`,
+      `${languageName} programming`,
+      "code snippets",
+      "programming",
+      "developer",
+    ],
+    openGraph: {
+      title: `${languageName} Code Snippets`,
+      description: `Browse ${snippetCount} code snippets in ${languageName}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${languageName} Code Snippets`,
+      description: `Browse ${snippetCount} code snippets in ${languageName}`,
+    },
+    alternates: {
+      canonical: `/tags/language/${params.id}`,
+    },
+  };
 }
 
 export default async function LanguageTagPage({

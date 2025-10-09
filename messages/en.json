@@ -1,0 +1,96 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
+    "home": "Home",
+    "about": "About",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "search": "Search",
+    "submit": "Submit",
+    "close": "Close"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "login": "Login",
+    "myProfile": "My Profile"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "loginSuccess": "Login successful",
+    "registerSuccess": "Registration successful",
+    "logoutSuccess": "Logout successful",
+    "invalidCredentials": "Invalid credentials",
+    "userExists": "User already exists"
+  },
+  "snippets": {
+    "title": "Code Snippets",
+    "createSnippet": "Create Snippet",
+    "editSnippet": "Edit Snippet",
+    "deleteSnippet": "Delete Snippet",
+    "snippetTitle": "Snippet Title",
+    "code": "Code",
+    "language": "Language",
+    "topics": "Topics",
+    "createdBy": "Created By",
+    "programmingLanguage": "Programming Language",
+    "codePreview": "Code Preview",
+    "complexity": "Complexity",
+    "view": "View",
+    "noSnippets": "No snippets found",
+    "snippetNotFound": "Snippet not found",
+    "snippetDeleted": "Snippet deleted successfully",
+    "snippetUpdated": "Snippet updated successfully",
+    "snippetCreated": "Snippet created successfully"
+  },
+  "languages": {
+    "javascript": "JavaScript",
+    "typescript": "TypeScript",
+    "python": "Python",
+    "go": "Go",
+    "java": "Java",
+    "cpp": "C++",
+    "csharp": "C#",
+    "php": "PHP",
+    "ruby": "Ruby",
+    "swift": "Swift"
+  },
+  "seo": {
+    "homeTitle": "Code Snippets Platform | Share & Discover Code",
+    "homeDescription": "Share and discover code snippets in various programming languages. Find solutions, learn new techniques, and contribute to the developer community.",
+    "snippetTitle": "{title} | Code Snippets Platform",
+    "snippetDescription": "Code snippet: {title} in {language} - Topics: {topics} by {author}",
+    "languageTitle": "{language} Code Snippets | Code Snippets Platform",
+    "languageDescription": "Browse {language} code snippets. Find solutions for common programming problems and learn best practices.",
+    "topicTitle": "{topic} Code Snippets | Code Snippets Platform",
+    "topicDescription": "Explore code snippets related to {topic}. Find implementations, examples, and solutions.",
+    "userTitle": "{name}'s Code Snippets | Code Snippets Platform",
+    "userDescription": "View code snippets shared by {name}. Discover their contributions to the developer community."
+  },
+  "footer": {
+    "copyright": "© 2025 CodeSnippets Platform. All rights reserved. Built by Triet Dang"
+  },
+  "login": {
+    "welcomeBack": "Welcome Back",
+    "signInToContinue": "Sign in to your account to continue",
+    "emailAddress": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "Sign In",
+    "createAccount": "Create Account"
+  }
+}

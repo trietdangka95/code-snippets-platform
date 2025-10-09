@@ -1,5 +1,6 @@
 // Link not used in this page
 import { headers } from "next/headers";
+import { Metadata } from "next";
 import SnippetMeta from "@/components/SnippetMeta";
 
 type ApiSnippet = {
@@ -23,6 +24,44 @@ async function fetchByTopic(id: string): Promise<{ snippets: ApiSnippet[] }> {
   });
   if (!res.ok) return { snippets: [] } as { snippets: ApiSnippet[] };
   return res.json() as Promise<{ snippets: ApiSnippet[] }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const data = await fetchByTopic(params.id);
+  const snippets = data.snippets ?? [];
+  const topicName = snippets[0]?.topics?.[0]?.topic.name ?? "Unknown Topic";
+  const snippetCount = snippets.length;
+
+  return {
+    title: `${topicName} Code Snippets`,
+    description: `Browse ${snippetCount} code snippets about ${topicName}. Find examples, tutorials, and solutions related to ${topicName}.`,
+    keywords: [
+      topicName,
+      `${topicName} code snippets`,
+      `${topicName} examples`,
+      `${topicName} programming`,
+      "code snippets",
+      "programming",
+      "developer",
+    ],
+    openGraph: {
+      title: `${topicName} Code Snippets`,
+      description: `Browse ${snippetCount} code snippets about ${topicName}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${topicName} Code Snippets`,
+      description: `Browse ${snippetCount} code snippets about ${topicName}`,
+    },
+    alternates: {
+      canonical: `/tags/topic/${params.id}`,
+    },
+  };
 }
 
 export default async function TopicTagPage({

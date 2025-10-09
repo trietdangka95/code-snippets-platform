@@ -10,7 +10,9 @@ interface ConditionalLayoutProps {
 const ConditionalLayout = ({ children }: ConditionalLayoutProps) => {
   const pathname = usePathname();
   const pathnameIncludes = ["/login", "/register"];
-  const showHeaderFooter = !pathnameIncludes.includes(pathname);
+  const showHeaderFooter = !pathnameIncludes.some((path) =>
+    pathname.includes(path)
+  );
 
   if (!showHeaderFooter) {
     return <>{children}</>;

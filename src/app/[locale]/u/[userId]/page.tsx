@@ -1,5 +1,6 @@
 // Link not used in this page
 import { headers } from "next/headers";
+import { Metadata } from "next";
 import SnippetMeta from "@/components/SnippetMeta";
 
 type ApiSnippet = {
@@ -28,6 +29,45 @@ async function fetchUserSnippets(
     return { snippets: [] } as { user?: ApiUser; snippets: ApiSnippet[] };
   }
   return res.json() as Promise<{ user?: ApiUser; snippets: ApiSnippet[] }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { userId: string };
+}): Promise<Metadata> {
+  const data = await fetchUserSnippets(params.userId);
+  const user = data.user;
+  const snippets = data.snippets ?? [];
+  const userName = user?.name || "Anonymous User";
+  const snippetCount = snippets.length;
+
+  return {
+    title: `${userName}'s Code Snippets`,
+    description: `Browse ${snippetCount} code snippets by ${userName}. Explore ${userName}'s programming examples, solutions, and contributions to the developer community.`,
+    keywords: [
+      userName,
+      `${userName} code snippets`,
+      `${userName} programming`,
+      "code snippets",
+      "programming",
+      "developer",
+      "portfolio",
+    ],
+    openGraph: {
+      title: `${userName}'s Code Snippets`,
+      description: `Browse ${snippetCount} code snippets by ${userName}`,
+      type: "profile",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${userName}'s Code Snippets`,
+      description: `Browse ${snippetCount} code snippets by ${userName}`,
+    },
+    alternates: {
+      canonical: `/u/${params.userId}`,
+    },
+  };
 }
 
 export default async function UserProfilePage({

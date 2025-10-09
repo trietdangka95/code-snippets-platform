@@ -1,0 +1,96 @@
+{
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "back": "Quay lại",
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "logout": "Đăng xuất",
+    "search": "Tìm kiếm",
+    "submit": "Gửi",
+    "close": "Đóng"
+  },
+  "navigation": {
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "login": "Đăng nhập",
+    "myProfile": "Hồ sơ của tôi"
+  },
+  "auth": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "logout": "Đăng xuất",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "name": "Tên",
+    "loginSuccess": "Đăng nhập thành công",
+    "registerSuccess": "Đăng ký thành công",
+    "logoutSuccess": "Đăng xuất thành công",
+    "invalidCredentials": "Thông tin đăng nhập không hợp lệ",
+    "userExists": "Người dùng đã tồn tại"
+  },
+  "snippets": {
+    "title": "Đoạn mã",
+    "createSnippet": "Tạo đoạn mã",
+    "editSnippet": "Chỉnh sửa đoạn mã",
+    "deleteSnippet": "Xóa đoạn mã",
+    "snippetTitle": "Tiêu đề đoạn mã",
+    "code": "Mã nguồn",
+    "language": "Ngôn ngữ",
+    "topics": "Chủ đề",
+    "createdBy": "Tạo bởi",
+    "programmingLanguage": "Ngôn ngữ lập trình",
+    "codePreview": "Xem trước mã",
+    "complexity": "Độ phức tạp",
+    "view": "Xem",
+    "noSnippets": "Không tìm thấy đoạn mã nào",
+    "snippetNotFound": "Không tìm thấy đoạn mã",
+    "snippetDeleted": "Xóa đoạn mã thành công",
+    "snippetUpdated": "Cập nhật đoạn mã thành công",
+    "snippetCreated": "Tạo đoạn mã thành công"
+  },
+  "languages": {
+    "javascript": "JavaScript",
+    "typescript": "TypeScript",
+    "python": "Python",
+    "go": "Go",
+    "java": "Java",
+    "cpp": "C++",
+    "csharp": "C#",
+    "php": "PHP",
+    "ruby": "Ruby",
+    "swift": "Swift"
+  },
+  "seo": {
+    "homeTitle": "Nền tảng Đoạn mã | Chia sẻ & Khám phá Code",
+    "homeDescription": "Chia sẻ và khám phá các đoạn mã trong nhiều ngôn ngữ lập trình khác nhau. Tìm giải pháp, học kỹ thuật mới và đóng góp cho cộng đồng lập trình viên.",
+    "snippetTitle": "{title} | Nền tảng Đoạn mã",
+    "snippetDescription": "Đoạn mã: {title} trong {language} - Chủ đề: {topics} bởi {author}",
+    "languageTitle": "Đoạn mã {language} | Nền tảng Đoạn mã",
+    "languageDescription": "Duyệt các đoạn mã {language}. Tìm giải pháp cho các vấn đề lập trình phổ biến và học các thực hành tốt nhất.",
+    "topicTitle": "Đoạn mã {topic} | Nền tảng Đoạn mã",
+    "topicDescription": "Khám phá các đoạn mã liên quan đến {topic}. Tìm các triển khai, ví dụ và giải pháp.",
+    "userTitle": "Đoạn mã của {name} | Nền tảng Đoạn mã",
+    "userDescription": "Xem các đoạn mã được chia sẻ bởi {name}. Khám phá những đóng góp của họ cho cộng đồng lập trình viên."
+  },
+  "footer": {
+    "copyright": "© 2025 Nền tảng CodeSnippets. Tất cả quyền được bảo lưu. Được xây dựng bởi Triet Dang"
+  },
+  "login": {
+    "welcomeBack": "Chào mừng trở lại",
+    "signInToContinue": "Đăng nhập vào tài khoản của bạn để tiếp tục",
+    "emailAddress": "Địa chỉ Email",
+    "emailPlaceholder": "ban@example.com",
+    "password": "Mật khẩu",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "Đăng nhập",
+    "createAccount": "Tạo tài khoản"
+  }
+}

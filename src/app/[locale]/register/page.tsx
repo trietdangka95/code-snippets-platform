@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useLocale } from "next-intl";
 import Button from "@/components/ui/Button";
 import { useToast } from "@/hooks/useToast";
 import { Controller, useForm } from "react-hook-form";
@@ -16,8 +17,17 @@ interface Inputs {
 }
 const RegisterPage = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = useLocale();
   const { success, error } = useToast();
   const [loading, setLoading] = useState(false);
+
+  const switchLanguage = (newLocale: string) => {
+    // Remove current locale from pathname
+    const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
+    // Navigate to new locale
+    router.push(`/${newLocale}${pathnameWithoutLocale}`);
+  };
 
   const {
     handleSubmit,
@@ -57,13 +67,42 @@ const RegisterPage = () => {
     );
     if (res.id) {
       success("Account created successfully");
-      router.push("/login");
+      router.push(`/${locale}/login`);
     } else {
       error(res.error);
     }
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 flex items-center justify-center px-6 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 flex items-center justify-center px-6 py-12 relative">
+      {/* Language Switcher */}
+      <div className="absolute top-6 right-6">
+        <div className="relative">
+          <select
+            value={locale}
+            onChange={(e) => switchLanguage(e.target.value)}
+            className="appearance-none bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-lg w-full"
+          >
+            <option value="en">English</option>
+            <option value="vi">Tiếng Việt</option>
+          </select>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <svg
+              className="w-4 h-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+
       <div className="w-full max-w-md">
         <div className="rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm">
           <div className="text-center mb-8">

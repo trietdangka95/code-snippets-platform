@@ -4,9 +4,9 @@ import { extractUserId } from "@/lib/auth";
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await params;
 
   // Extract and validate user
   const userId = extractUserId(req);
@@ -100,9 +100,9 @@ export async function PUT(
 
 export async function GET(
   _req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await params;
   const snippet = await prisma.snippet.findUnique({
     where: { id },
     include: {
@@ -119,9 +119,9 @@ export async function GET(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await params;
 
   // Extract and validate user
   const userId = extractUserId(req);
