@@ -1,14 +1,19 @@
 "use client";
 import Link from "next/link";
 import Button from "../ui/Button";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const Header = () => {
   const router = useRouter();
+  const pathname = usePathname();
 
-  const handleLogout = () => {
-    document.cookie = "token=; path=/; max-age=0";
-    router.push("/login");
+  const handleLogout = async () => {
+    const res = await fetch("/api/auth/logout", {
+      method: "POST",
+    });
+    if (res.ok) {
+      router.push("/login");
+    }
   };
   return (
     <header className="w-full bg-white/90 backdrop-blur-md border-b border-gray-200/50 shadow-lg">
@@ -42,19 +47,35 @@ const Header = () => {
             <li>
               <Link
                 href="/"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 relative group"
+                className={`text-sm font-medium transition-colors duration-200 relative group ${
+                  pathname === "/"
+                    ? "text-blue-600"
+                    : "text-gray-700 hover:text-blue-600"
+                }`}
               >
                 Home
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-200"></span>
+                <span
+                  className={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-200 ${
+                    pathname === "/" ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                ></span>
               </Link>
             </li>
             <li>
               <Link
                 href="/about"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 relative group"
+                className={`text-sm font-medium transition-colors duration-200 relative group ${
+                  pathname === "/about"
+                    ? "text-blue-600"
+                    : "text-gray-700 hover:text-blue-600"
+                }`}
               >
                 About
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-200"></span>
+                <span
+                  className={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-200 ${
+                    pathname === "/about" ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                ></span>
               </Link>
             </li>
             <li className="h-8 w-px bg-gray-300"></li>

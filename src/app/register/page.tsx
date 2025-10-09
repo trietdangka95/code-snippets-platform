@@ -1,67 +1,104 @@
 "use client";
-import Button from "@/components/ui/Button";
-import authService from "@/services/auth";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Button from "@/components/ui/Button";
+import { useToast } from "@/hooks/useToast";
 import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Contrail_One } from "next/font/google";
 import Input from "@/components/ui/Input";
-import Link from "next/link";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import authService from "@/services/auth";
+interface Inputs {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+const RegisterPage = () => {
+  const router = useRouter();
+  const { success, error } = useToast();
+  const [loading, setLoading] = useState(false);
 
-const LoginPage = () => {
-  interface Inputs {
-    email: string;
-    password: string;
-  }
-  const schema = yup
-    .object({
-      email: yup.string().email("Invalid email").required("Email is required"),
-      password: yup.string().required("Password is required"),
-    })
-    .required();
   const {
     handleSubmit,
     control,
     formState: { errors },
     clearErrors,
   } = useForm<Inputs>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(
+      yup.object({
+        email: yup
+          .string()
+          .email("Invalid email")
+          .required("Email is required"),
+        password: yup.string().required("Password is required"),
+        name: yup.string().required("Name is required"),
+        confirmPassword: yup
+          .string()
+          .required("Confirm Password is required")
+          .oneOf([yup.ref("password"), ""], "Passwords must match"),
+      })
+    ),
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
-  const router = useRouter();
+
   const onSubmit = async (data: Inputs) => {
-    const res = await authService.login(data.email, data.password);
+    const res = await authService.register(
+      data.email,
+      data.password,
+      data.name
+    );
     if (res.id) {
-      router.push("/");
+      success("Account created successfully");
+      router.push("/login");
+    } else {
+      error(res.error);
     }
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
         <div className="rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2">
-              Welcome Back
+              Create Account
             </h1>
-            <p className="text-gray-600 text-sm">
-              Sign in to your account to continue
-            </p>
+            <p className="text-gray-600 text-sm">Join CodeSnippets today</p>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <Controller
+              control={control}
+              name="name"
+              render={({ field }) => (
+                <div className="relative">
+                  <Input
+                    label="Name"
+                    placeholder="John Doe"
+                    error={errors.name?.message}
+                    onClearError={() => clearErrors("name")}
+                    className="group-hover:shadow-md transition-all duration-200"
+                    type="text"
+                    {...field}
+                  />
+                </div>
+              )}
+            />
+
             <Controller
               control={control}
               name="email"
               render={({ field }) => (
                 <div className="relative">
                   <Input
-                    label="Email Address"
+                    label="Email"
                     placeholder="you@example.com"
                     error={errors.email?.message}
                     onClearError={() => clearErrors("email")}
@@ -90,6 +127,23 @@ const LoginPage = () => {
                 </div>
               )}
             />
+            <Controller
+              control={control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <div className="relative">
+                  <Input
+                    label="Confirm Password"
+                    placeholder="••••••••"
+                    error={errors.confirmPassword?.message}
+                    onClearError={() => clearErrors("confirmPassword")}
+                    className="group-hover:shadow-md transition-all duration-200"
+                    type="password"
+                    {...field}
+                  />
+                </div>
+              )}
+            />
 
             <Button type="submit" variant="primary" className="w-full">
               <span className="flex items-center justify-center gap-2">
@@ -103,25 +157,17 @@ const LoginPage = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                    d="M12 4v16m8-8H4"
                   />
                 </svg>
-                Sign In
+                {loading ? "Creating..." : "Create Account"}
               </span>
             </Button>
           </form>
-          {/* style create account link */}
-          <div className="flex justify-center mb-2 mt-4">
-            <Link
-              href="/register"
-              className="text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
-            >
-              Create Account
-            </Link>
-          </div>
         </div>
       </div>
     </div>
   );
 };
-export default LoginPage;
+
+export default RegisterPage;

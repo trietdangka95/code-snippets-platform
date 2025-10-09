@@ -1,5 +1,4 @@
 const UITag = ({ children }: { children: React.ReactNode }) => {
-  //tách children thành mảng
   const tags = children?.toString().split(",");
   return (
     <div className="flex flex-wrap items-center gap-2">

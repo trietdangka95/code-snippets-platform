@@ -40,7 +40,7 @@ const Dropdown = React.forwardRef<HTMLSelectElement, DropdownProps>(
                 ref={ref}
                 value={value}
                 className={clsx(
-                  "mt-3 block w-full appearance-none rounded-lg border px-3 py-1.5 text-sm/6 bg-white",
+                  "block w-full appearance-none rounded-lg border px-3 py-1.5 text-sm/6",
                   error
                     ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20"
                     : "border-gray-300 focus:border-gray-500 focus:ring-gray-500/20",

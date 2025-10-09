@@ -7,12 +7,14 @@ type ButtonProps = {
   className?: string;
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 };
 
 const Button = ({
   children,
   variant = "primary",
   className,
+  disabled,
   ...props
 }: ButtonProps) => {
   const base = "px-4 py-2 rounded font-medium transition focus:outline-none";
@@ -36,7 +38,8 @@ const Button = ({
         variants[variant],
         types[props.type ?? "button"],
         "cursor-pointer",
-        className
+        className,
+        disabled && "opacity-50 cursor-not-allowed"
       )}
     >
       {children}

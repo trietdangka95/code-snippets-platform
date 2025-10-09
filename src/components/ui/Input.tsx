@@ -41,7 +41,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           placeholder={placeholder}
           className={clsx(
-            "mt-3 block w-full rounded-lg border px-3 py-1.5 text-sm/6",
+            "block w-full rounded-lg border px-3 py-1.5 text-sm/6",
             error
               ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20"
               : "border-gray-300 bg-gray-50 focus:border-gray-500 focus:ring-gray-500/20",

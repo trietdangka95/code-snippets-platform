@@ -3,9 +3,13 @@ import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
-  const isAuthPage = req.nextUrl.pathname.startsWith("/login");
+  console.log("token", token);
+  const unauthenticatedRoutes = ["/register"];
+  const pathname = req.nextUrl.pathname;
+  const isAuthPage = pathname.startsWith("/login");
+  const isAllowedUnauth = unauthenticatedRoutes.includes(pathname);
 
-  if (!token && !isAuthPage) {
+  if (!token && !isAuthPage && !isAllowedUnauth) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
@@ -21,14 +25,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
