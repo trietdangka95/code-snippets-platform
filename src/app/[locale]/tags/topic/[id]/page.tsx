@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Metadata } from "next";
 import SnippetMeta from "@/components/SnippetMeta";
 import { prisma } from "@/lib/prisma";
+export const runtime = "nodejs";
 
 type ApiSnippet = {
   id: string;
@@ -45,12 +46,13 @@ async function fetchTopicById(
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const topic = await fetchTopicById(params.id);
+  const { id } = await params;
+  const topic = await fetchTopicById(id);
   const topicName = topic?.name ?? "Unknown Topic";
 
-  const data = await fetchByTopic(params.id);
+  const data = await fetchByTopic(id);
   const snippets = data.snippets ?? [];
   const snippetCount = snippets.length;
 
@@ -77,7 +79,7 @@ export async function generateMetadata({
       description: `Browse ${snippetCount} code snippets about ${topicName}`,
     },
     alternates: {
-      canonical: `/tags/topic/${params.id}`,
+      canonical: `/tags/topic/${id}`,
     },
   };
 }
@@ -85,9 +87,9 @@ export async function generateMetadata({
 export default async function TopicTagPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
   const topic = await fetchTopicById(id);
   const topicName = topic?.name ?? "Unknown Topic";
 

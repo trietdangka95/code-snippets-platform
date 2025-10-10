@@ -17,7 +17,7 @@ export default function ClientProviders({
   locale,
 }: ClientProvidersProps) {
   return (
-    <NextIntlClientProvider messages={messages} locale={locale}>
+    <NextIntlClientProvider messages={messages} locale={locale} timeZone="UTC">
       <ToastProvider>
         <ConditionalLayout>{children}</ConditionalLayout>
         <ToastContainer />

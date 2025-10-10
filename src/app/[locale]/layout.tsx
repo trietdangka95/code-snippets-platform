@@ -4,6 +4,8 @@ import ClientProviders from "@/components/ClientProviders";
 import enMessages from "../../../messages/en.json";
 import viMessages from "../../../messages/vi.json";
 import { Geist, Geist_Mono } from "next/font/google";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

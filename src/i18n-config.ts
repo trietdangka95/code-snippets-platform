@@ -20,5 +20,6 @@ export default getRequestConfig(({ locale }) => {
   return {
     locale,
     messages: messagesMap[locale as Locale],
+    timeZone: "UTC",
   };
 });

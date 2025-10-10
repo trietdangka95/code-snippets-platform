@@ -129,7 +129,7 @@ const RegisterPage = () => {
                 <div className="relative">
                   <Input
                     label="Name"
-                    placeholder="John Doe"
+                    placeholder="Enter your name"
                     error={errors.name?.message}
                     onClearError={() => clearErrors("name")}
                     className="group-hover:shadow-md transition-all duration-200"

@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import LanguageColor from "@/components/LanguageColor";
 import SnippetMeta from "@/components/SnippetMeta";
 import { prisma } from "@/lib/prisma";
+export const runtime = "nodejs";
 
 type ApiSnippet = {
   id: string;
@@ -48,12 +49,13 @@ async function fetchLanguageById(
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const language = await fetchLanguageById(params.id);
+  const { id } = await params;
+  const language = await fetchLanguageById(id);
   const languageName = language?.name ?? "Unknown Language";
 
-  const data = await fetchByLanguage(params.id);
+  const data = await fetchByLanguage(id);
   const snippets = data.snippets ?? [];
   const snippetCount = snippets.length;
 
@@ -80,7 +82,7 @@ export async function generateMetadata({
       description: `Browse ${snippetCount} code snippets in ${languageName}`,
     },
     alternates: {
-      canonical: `/tags/language/${params.id}`,
+      canonical: `/tags/language/${id}`,
     },
   };
 }
@@ -88,9 +90,9 @@ export async function generateMetadata({
 export default async function LanguageTagPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
   const language = await fetchLanguageById(id);
   const languageName = language?.name ?? "Unknown Language";
 

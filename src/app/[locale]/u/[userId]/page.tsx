@@ -34,9 +34,10 @@ async function fetchUserSnippets(
 export async function generateMetadata({
   params,
 }: {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }): Promise<Metadata> {
-  const data = await fetchUserSnippets(params.userId);
+  const { userId } = await params;
+  const data = await fetchUserSnippets(userId);
   const user = data.user;
   const snippets = data.snippets ?? [];
   const userName = user?.name || "Anonymous User";
@@ -65,7 +66,7 @@ export async function generateMetadata({
       description: `Browse ${snippetCount} code snippets by ${userName}`,
     },
     alternates: {
-      canonical: `/u/${params.userId}`,
+      canonical: `/u/${userId}`,
     },
   };
 }
@@ -73,9 +74,9 @@ export async function generateMetadata({
 export default async function UserProfilePage({
   params,
 }: {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }) {
-  const { userId } = params;
+  const { userId } = await params;
   const data = await fetchUserSnippets(userId);
   const snippets = data.snippets ?? [];
   const user = data.user;

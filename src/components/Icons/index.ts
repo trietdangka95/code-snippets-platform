@@ -6,6 +6,7 @@ export { default as MenuIcon } from "./MenuIcon";
 export { default as LightningIcon } from "./LightningIcon";
 export { default as CheckCircleIcon } from "./CheckCircleIcon";
 export { default as EyeIcon } from "./EyeIcon";
+export { default as EyeOffIcon } from "./EyeOffIcon";
 export { default as CopyIcon } from "./CopyIcon";
 export { default as TrashIcon } from "./TrashIcon";
 export { default as EditIcon } from "./EditIcon";
