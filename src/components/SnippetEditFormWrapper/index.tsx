@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import SnippetEditForm from "@/components/SnippetEditForm";
 import Button from "@/components/ui/Button";
+import { useUser } from "@/contexts/UserContext";
 
 type ApiSnippet = {
   id: string;
@@ -21,27 +22,8 @@ const SnippetEditFormWrapper = ({
   onEditStateChange?: (isEditing: boolean) => void;
 }) => {
   const [showEditForm, setShowEditForm] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const isNotOwner = currentUserId !== snippet?.user?.id;
-
-  useEffect(() => {
-    let active = true;
-    const loadCurrentUser = async () => {
-      try {
-        const res = await fetch("/api/auth/me", { credentials: "include" });
-        const data = await res.json().catch(() => ({}));
-        if (res.ok && active) {
-          setCurrentUserId(data?.user?.id || null);
-        }
-      } catch (error) {
-        console.error("Error loading current user:", error);
-      }
-    };
-    loadCurrentUser();
-    return () => {
-      active = false;
-    };
-  }, []);
+  const { user } = useUser();
+  const isNotOwner = user?.id !== snippet?.user?.id;
 
   if (showEditForm) {
     return (
@@ -75,12 +57,12 @@ const SnippetEditFormWrapper = ({
   return (
     <Button
       onClick={() => {
-        if (currentUserId && !isNotOwner) {
+        if (user?.id && !isNotOwner) {
           setShowEditForm(true);
           onEditStateChange?.(true);
         }
       }}
-      disabled={!currentUserId}
+      disabled={!user?.id}
       className="mt-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
     >
       <span className="flex items-center justify-center gap-2">

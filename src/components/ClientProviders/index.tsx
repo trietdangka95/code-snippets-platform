@@ -1,6 +1,7 @@
 "use client";
 
 import { ToastProvider } from "@/contexts/ToastContext";
+import { UserProvider } from "@/contexts/UserContext";
 import ConditionalLayout from "@/components/ConditionalLayout";
 import { NextIntlClientProvider } from "next-intl";
 import { ToastContainer } from "@/components/ui/ToastContainer";
@@ -18,10 +19,12 @@ export default function ClientProviders({
 }: ClientProvidersProps) {
   return (
     <NextIntlClientProvider messages={messages} locale={locale} timeZone="UTC">
-      <ToastProvider>
-        <ConditionalLayout>{children}</ConditionalLayout>
-        <ToastContainer />
-      </ToastProvider>
+      <UserProvider>
+        <ToastProvider>
+          <ConditionalLayout>{children}</ConditionalLayout>
+          <ToastContainer />
+        </ToastProvider>
+      </UserProvider>
     </NextIntlClientProvider>
   );
 }

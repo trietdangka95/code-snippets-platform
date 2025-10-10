@@ -1,6 +1,21 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Inter, JetBrains_Mono } from "next/font/google";
+import { headers } from "next/headers";
+
 export const runtime = "nodejs";
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin", "vietnamese"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin", "vietnamese"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -60,10 +75,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  const headersList = await headers();
+  const pathname =
+    headersList.get("x-pathname") || headersList.get("x-url") || "";
+  const locale = pathname.split("/")[1] || "en";
+
+  return (
+    <html lang={locale}>
+      <body
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
+      >
+        {children}
+      </body>
+    </html>
+  );
 }

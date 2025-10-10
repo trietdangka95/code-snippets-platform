@@ -4,6 +4,8 @@ import Input from "../ui/Input";
 import Dropdown from "../ui/Dropdown";
 import Button from "../ui/Button";
 import { LoadingOverlay, InlineSpinner } from "../ui/Loading";
+import { useTranslations } from "next-intl";
+import { PlusIcon } from "@/components/Icons";
 import TextareaComponent from "../ui/Textarea";
 import { SubmitHandler, useForm, type Resolver } from "react-hook-form";
 import { Controller } from "react-hook-form";
@@ -28,6 +30,7 @@ const schema: yup.ObjectSchema<Inputs> = yup
 
 const SnippetCreatePage = ({ onCreated }: { onCreated?: () => void }) => {
   const { success, error } = useToast();
+  const t = useTranslations("createSnippet");
 
   const {
     handleSubmit,
@@ -48,7 +51,7 @@ const SnippetCreatePage = ({ onCreated }: { onCreated?: () => void }) => {
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const res = await snippetService.createSnippet(data);
     if (res.id) {
-      success("Snippet created successfully");
+      success(t("createdSuccess"));
       onCreated?.();
     } else {
       error(res.error);
@@ -59,11 +62,9 @@ const SnippetCreatePage = ({ onCreated }: { onCreated?: () => void }) => {
     <aside className="relative rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 h-max backdrop-blur-sm">
       <div className="mb-8">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2">
-          Add Snippet
+          {t("title")}
         </h2>
-        <p className="text-gray-600 text-sm">
-          Create and share your code snippets
-        </p>
+        <p className="text-gray-600 text-sm">{t("subtitle")}</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="group">
@@ -73,8 +74,8 @@ const SnippetCreatePage = ({ onCreated }: { onCreated?: () => void }) => {
             render={({ field }) => (
               <div className="relative">
                 <Input
-                  label="Title"
-                  placeholder="ex: Quick Sort in JavaScript"
+                  label={t("fields.title")}
+                  placeholder={t("placeholders.title")}
                   error={errors.title?.message}
                   onClearError={() => clearErrors("title")}
                   className="group-hover:shadow-md transition-all duration-200"
@@ -92,8 +93,8 @@ const SnippetCreatePage = ({ onCreated }: { onCreated?: () => void }) => {
             render={({ field }) => (
               <div className="relative">
                 <Input
-                  label="Topics"
-                  placeholder="ex: sorting, algorithm"
+                  label={t("fields.topics")}
+                  placeholder={t("placeholders.topics")}
                   error={errors.topic?.message}
                   onClearError={() => clearErrors("topic")}
                   className="group-hover:shadow-md transition-all duration-200"
@@ -110,7 +111,7 @@ const SnippetCreatePage = ({ onCreated }: { onCreated?: () => void }) => {
             render={({ field }) => (
               <div className="relative">
                 <Dropdown
-                  label="Language"
+                  label={t("fields.language")}
                   options={[
                     "JavaScript",
                     "TypeScript",
@@ -140,16 +141,16 @@ const SnippetCreatePage = ({ onCreated }: { onCreated?: () => void }) => {
             render={({ field }) => (
               <div className="relative">
                 <TextareaComponent
-                  label="Code Snippet"
+                  label={t("fields.code")}
                   rows={8}
-                  placeholder="// Write your code here..."
+                  placeholder={t("placeholders.code")}
                   error={errors.code?.message}
                   onClearError={() => clearErrors("code")}
                   className="group-hover:shadow-md transition-all duration-200 font-mono text-sm"
                   {...field}
                 />
                 <div className="mt-2 text-xs text-gray-500">
-                  Use proper indentation and comments for better readability
+                  {t("hints.code")}
                 </div>
               </div>
             )}
@@ -163,23 +164,11 @@ const SnippetCreatePage = ({ onCreated }: { onCreated?: () => void }) => {
           >
             <span className="flex items-center justify-center gap-2">
               {isSubmitting ? (
-                <InlineSpinner message="Processing..." />
+                <InlineSpinner message={t("processing")} />
               ) : (
                 <>
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                  Create Snippet
+                  <PlusIcon className="w-5 h-5" />
+                  {t("submit")}
                 </>
               )}
             </span>
@@ -187,7 +176,7 @@ const SnippetCreatePage = ({ onCreated }: { onCreated?: () => void }) => {
         </div>
       </form>
 
-      <LoadingOverlay show={isSubmitting} message="Submitting..." />
+      <LoadingOverlay show={isSubmitting} message={t("submitting")} />
     </aside>
   );
 };

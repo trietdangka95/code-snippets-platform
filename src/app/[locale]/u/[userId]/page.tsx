@@ -3,6 +3,8 @@ import { headers } from "next/headers";
 import { Metadata } from "next";
 import SnippetMeta from "@/components/SnippetMeta";
 
+export const runtime = "nodejs";
+
 type ApiSnippet = {
   id: string;
   title: string;

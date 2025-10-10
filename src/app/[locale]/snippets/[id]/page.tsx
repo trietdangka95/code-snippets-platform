@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import SnippetDetailWrapper from "@/components/SnippetDetailWrapper";
+import { DocumentIcon } from "@/components/Icons";
 
 type ApiSnippet = {
   id: string;
@@ -101,19 +102,7 @@ export default async function SnippetDetailPage({
       <section className="w-full max-w-7xl mx-auto px-6 py-8 mt-10 rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm">
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <div className="mb-6">
-            <svg
-              className="w-24 h-24 text-gray-400 mx-auto"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.009-5.824-2.709M15 6.291A7.962 7.962 0 0012 5c-2.34 0-4.29 1.009-5.824 2.709"
-              />
-            </svg>
+            <DocumentIcon className="w-24 h-24 text-gray-400 mx-auto" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Snippet Not Found

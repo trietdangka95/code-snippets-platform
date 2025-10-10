@@ -15,7 +15,8 @@
     "logout": "Logout",
     "search": "Search",
     "submit": "Submit",
-    "close": "Close"
+    "close": "Close",
+    "unknown": "Unknown"
   },
   "navigation": {
     "home": "Home",
@@ -57,7 +58,13 @@
     "snippetNotFound": "Snippet not found",
     "snippetDeleted": "Snippet deleted successfully",
     "snippetUpdated": "Snippet updated successfully",
-    "snippetCreated": "Snippet created successfully"
+    "snippetCreated": "Snippet created successfully",
+    "untitled": "Untitled",
+    "copyLink": "Copy Link",
+    "delete": "Delete",
+    "loading": "Loading...",
+    "subtitle": "Search and explore code snippets from the community",
+    "copy": "Copy"
   },
   "languages": {
     "javascript": "JavaScript",
@@ -95,5 +102,27 @@
     "passwordPlaceholder": "••••••••",
     "signIn": "Sign In",
     "createAccount": "Create Account"
+  },
+  "createSnippet": {
+    "title": "Add Snippet",
+    "subtitle": "Create and share your code snippets",
+    "fields": {
+      "title": "Title",
+      "topics": "Topics",
+      "language": "Language",
+      "code": "Code Snippet"
+    },
+    "placeholders": {
+      "title": "ex: Quick Sort in JavaScript",
+      "topics": "ex: sorting, algorithm",
+      "code": "// Write your code here..."
+    },
+    "hints": {
+      "code": "Use proper indentation and comments for better readability"
+    },
+    "submit": "Create Snippet",
+    "submitting": "Submitting...",
+    "processing": "Processing...",
+    "createdSuccess": "Snippet created successfully"
   }
 }

@@ -6,40 +6,17 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "../LanguageSwitcher";
 import { CodeIcon, CloseIcon, MenuIcon } from "@/components/Icons";
+import { useUser } from "@/contexts/UserContext";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations("navigation");
-  const [currentUser, setCurrentUser] = useState<{
-    id: string;
-    name?: string;
-  } | null>(null);
+  const { user: currentUser } = useUser();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Remove locale prefix from pathname for comparison
   const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
-
-  useEffect(() => {
-    let active = true;
-    const loadMe = async () => {
-      try {
-        const res = await fetch("/api/auth/me", {
-          method: "GET",
-          credentials: "include",
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) return;
-        if (active) setCurrentUser(data?.user ?? null);
-      } catch {
-        // ignore
-      }
-    };
-    loadMe();
-    return () => {
-      active = false;
-    };
-  }, []);
 
   // Close mobile menu when screen size changes to desktop
   useEffect(() => {

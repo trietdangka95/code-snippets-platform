@@ -15,7 +15,8 @@
     "logout": "Đăng xuất",
     "search": "Tìm kiếm",
     "submit": "Gửi",
-    "close": "Đóng"
+    "close": "Đóng",
+    "unknown": "Không rõ"
   },
   "navigation": {
     "home": "Trang chủ",
@@ -57,7 +58,13 @@
     "snippetNotFound": "Không tìm thấy đoạn mã",
     "snippetDeleted": "Xóa đoạn mã thành công",
     "snippetUpdated": "Cập nhật đoạn mã thành công",
-    "snippetCreated": "Tạo đoạn mã thành công"
+    "snippetCreated": "Tạo đoạn mã thành công",
+    "untitled": "Không có tiêu đề",
+    "copyLink": "Sao chép liên kết",
+    "delete": "Xóa",
+    "loading": "Đang tải...",
+    "subtitle": "Tìm kiếm và khám phá các đoạn mã từ cộng đồng",
+    "copy": "Sao chép"
   },
   "languages": {
     "javascript": "JavaScript",
@@ -95,5 +102,25 @@
     "passwordPlaceholder": "••••••••",
     "signIn": "Đăng nhập",
     "createAccount": "Tạo tài khoản"
+  },
+  "createSnippet": {
+    "title": "Thêm Đoạn Mã",
+    "subtitle": "Tạo và chia sẻ các đoạn mã của bạn",
+    "fields": {
+      "title": "Tiêu đề",
+      "topics": "Chủ đề",
+      "language": "Ngôn ngữ",
+      "code": "Đoạn mã"
+    },
+    "placeholders": {
+      "title": "ví dụ: Sắp xếp nhanh trong JavaScript",
+      "topics": "ví dụ: sorting, algorithm",
+      "code": "// Viết mã của bạn tại đây..."
+    },
+    "hints": { "code": "Sử dụng thụt lề và chú thích phù hợp để dễ đọc hơn" },
+    "submit": "Tạo Đoạn Mã",
+    "submitting": "Đang gửi...",
+    "processing": "Đang xử lý...",
+    "createdSuccess": "Tạo đoạn mã thành công"
   }
 }

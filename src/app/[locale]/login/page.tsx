@@ -76,12 +76,12 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 flex items-center justify-center px-6 py-12 relative">
       {/* Language Switcher */}
-      <div className="absolute top-6 right-6">
+      <div className="absolute top-6 right-6 z-50">
         <div className="relative">
           <select
             value={locale}
             onChange={(e) => switchLanguage(e.target.value)}
-            className="appearance-none bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-lg w-full"
+            className="appearance-none bg-white/95 backdrop-blur-sm border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-xl w-full min-w-[120px]"
           >
             <option value="en">English</option>
             <option value="vi">Tiếng Việt</option>

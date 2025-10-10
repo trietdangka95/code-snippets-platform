@@ -37,7 +37,7 @@ const Button = ({
         base,
         variants[variant],
         types[props.type ?? "button"],
-        "cursor-pointer",
+        disabled ? "cursor-default" : "cursor-pointer",
         className,
         disabled && "opacity-50 cursor-not-allowed"
       )}
