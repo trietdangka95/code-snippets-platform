@@ -16,13 +16,20 @@ export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
 
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as any)) {
+  if (!locales.includes(locale as (typeof locales)[number])) {
     notFound();
   }
 
   // Providing all messages to the client
   // side is the easiest way to get started
-  const messages = await getMessages({ locale });
+  let messages: Record<string, unknown> = {};
+  try {
+    messages = await getMessages({ locale });
+  } catch (error) {
+    console.error("Failed to load messages:", error);
+    // Fallback to empty messages
+    messages = {};
+  }
 
   return (
     <html lang={locale || "en"}>

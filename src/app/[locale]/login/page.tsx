@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Contrail_One } from "next/font/google";
 import Input from "@/components/ui/Input";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

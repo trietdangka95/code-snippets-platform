@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(snippet, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to create snippet" },
       { status: 500 }

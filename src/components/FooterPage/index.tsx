@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 text-white">

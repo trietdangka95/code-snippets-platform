@@ -24,7 +24,9 @@ export function middleware(req: NextRequest) {
   if (pathnameIsMissingLocale) {
     const locale =
       req.headers.get("accept-language")?.split(",")[0]?.split("-")[0] || "en";
-    const localeToUse = locales.includes(locale as any) ? locale : "en";
+    const localeToUse = locales.includes(locale as (typeof locales)[number])
+      ? locale
+      : "en";
     const url = req.nextUrl.clone();
     url.pathname = `/${localeToUse}${pathname}`;
     return NextResponse.redirect(url);

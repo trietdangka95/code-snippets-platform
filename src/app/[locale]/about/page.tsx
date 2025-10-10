@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const AboutPage = () => {
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -174,18 +176,18 @@ const AboutPage = () => {
             connect with developers from around the world.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+            <Link
               href="/register"
               className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-200 shadow-lg"
             >
               Get Started
-            </a>
-            <a
+            </Link>
+            <Link
               href="/"
               className="px-6 py-3 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-colors duration-200"
             >
               Explore Snippets
-            </a>
+            </Link>
           </div>
         </div>
       </div>

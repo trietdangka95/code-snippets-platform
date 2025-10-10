@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
 import Button from "@/components/ui/Button";
@@ -21,7 +20,6 @@ const RegisterPage = () => {
   const pathname = usePathname();
   const locale = useLocale();
   const { success, error } = useToast();
-  const [loading, setLoading] = useState(false);
 
   const switchLanguage = (newLocale: string) => {
     // Remove current locale from pathname

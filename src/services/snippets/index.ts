@@ -27,7 +27,9 @@ const snippetService = {
       const meta = await fetch("/api/meta", { credentials: "include" }).then(
         (r) => r.json()
       );
-      const lang = meta.languages?.find((l: any) => l.id === data.languageId);
+      const lang = meta.languages?.find(
+        (l: { id: string; name: string }) => l.id === data.languageId
+      );
       languageName = lang?.name;
     }
     if (data.topic && typeof data.topic === "string") {
@@ -40,8 +42,10 @@ const snippetService = {
         (r) => r.json()
       );
       topicsArr = meta.topics
-        ?.filter((t: any) => data.topicIds!.includes(t.id))
-        .map((t: any) => t.name);
+        ?.filter((t: { id: string; name: string }) =>
+          data.topicIds!.includes(t.id)
+        )
+        .map((t: { id: string; name: string }) => t.name);
     }
 
     if (!languageName || topicsArr.length === 0) {
@@ -91,7 +95,7 @@ const snippetService = {
         (r) => r.json()
       );
       languageName = meta.languages?.find(
-        (l: any) => l.id === data.languageId
+        (l: { id: string; name: string }) => l.id === data.languageId
       )?.name;
     }
     if (data.topic) {
@@ -104,8 +108,10 @@ const snippetService = {
         (r) => r.json()
       );
       topicsArr = meta.topics
-        ?.filter((t: any) => data.topicIds!.includes(t.id))
-        .map((t: any) => t.name);
+        ?.filter((t: { id: string; name: string }) =>
+          data.topicIds!.includes(t.id)
+        )
+        .map((t: { id: string; name: string }) => t.name);
     }
 
     const body = {

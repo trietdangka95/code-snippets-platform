@@ -33,18 +33,24 @@ export default function DebugMetadataPage() {
             Platform&lt;/title&gt;
           </li>
           <li>
-            &lt;meta name="description" content="This is a test page..."&gt;
-          </li>
-          <li>&lt;meta name="keywords" content="test, debug, metadata"&gt;</li>
-          <li>
-            &lt;meta property="og:title" content="Debug Metadata Test"&gt;
+            &lt;meta name=&quot;description&quot; content=&quot;This is a test
+            page...&quot;&gt;
           </li>
           <li>
-            &lt;meta property="og:description" content="This is a test
-            page..."&gt;
+            &lt;meta name=&quot;keywords&quot; content=&quot;test, debug,
+            metadata&quot;&gt;
           </li>
           <li>
-            &lt;meta name="twitter:card" content="summary_large_image"&gt;
+            &lt;meta property=&quot;og:title&quot; content=&quot;Debug Metadata
+            Test&quot;&gt;
+          </li>
+          <li>
+            &lt;meta property=&quot;og:description&quot; content=&quot;This is a
+            test page...&quot;&gt;
+          </li>
+          <li>
+            &lt;meta name=&quot;twitter:card&quot;
+            content=&quot;summary_large_image&quot;&gt;
           </li>
         </ul>
       </div>
