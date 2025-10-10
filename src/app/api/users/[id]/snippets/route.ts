@@ -9,7 +9,6 @@ export async function GET(
   try {
     const { id: userId } = await params;
 
-    // Single query to get user and snippets together
     const result = await prisma.user.findUnique({
       where: { id: userId },
       select: {

@@ -22,7 +22,6 @@ export default async function LocaleLayout({ children, params }: Props) {
     notFound();
   }
 
-  // Load messages directly
   let messages: Record<string, unknown> = {};
   if (locale === "en") {
     messages = enMessages;
