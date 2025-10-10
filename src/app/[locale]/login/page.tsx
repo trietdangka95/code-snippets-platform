@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/components/ui/Button";
 import authService from "@/services/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,8 +13,10 @@ import { LoadingOverlay } from "@/components/ui/Loading";
 import { useToast } from "@/hooks/useToast";
 import { ChevronDownIcon, LoginIcon } from "@/components/Icons";
 import { useUser } from "@/contexts/UserContext";
+import { useState } from "react";
 
 const LoginPage = () => {
+  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
   interface Inputs {
     email: string;
     password: string;
@@ -45,6 +47,7 @@ const LoginPage = () => {
   const t = useTranslations("login");
   const { error } = useToast();
   const { refetch } = useUser();
+  const searchParams = useSearchParams();
   const switchLanguage = (newLocale: string) => {
     const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
     router.push(`/${newLocale}${pathnameWithoutLocale}`);
@@ -54,9 +57,21 @@ const LoginPage = () => {
     try {
       const res = await authService.login(data.email, data.password);
       if (res.id) {
+        // Set login success state to hide form
+        setIsLoginSuccess(true);
+
         // Refetch user data to update the context
         await refetch();
-        router.push(`/${locale}/home`);
+
+        // Get returnUrl from query params
+        const returnUrl = searchParams.get("returnUrl");
+
+        // Redirect to returnUrl if exists, otherwise to home
+        if (returnUrl) {
+          router.push(returnUrl);
+        } else {
+          router.push(`/${locale}/home`);
+        }
       }
     } catch (err) {
       error(
@@ -96,75 +111,106 @@ const LoginPage = () => {
 
       <div className="w-full max-w-md">
         <div className="rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2">
-              {t("welcomeBack")}
-            </h1>
-            <p className="text-gray-600 text-sm">{t("signInToContinue")}</p>
-          </div>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            onKeyDown={handleKeyDown}
-            className="space-y-6"
-          >
-            <Controller
-              control={control}
-              name="email"
-              render={({ field }) => (
-                <div className="relative">
-                  <Input
-                    label={t("emailAddress")}
-                    placeholder={t("emailPlaceholder")}
-                    error={errors.email?.message}
-                    onClearError={() => clearErrors("email")}
-                    className="group-hover:shadow-md transition-all duration-200"
-                    type="email"
-                    onKeyDown={handleKeyDown}
-                    {...field}
-                  />
+          {isLoginSuccess ? (
+            <div className="text-center">
+              <div className="mb-6">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg
+                    className="w-8 h-8 text-green-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
                 </div>
-              )}
-            />
+                <h1 className="text-2xl font-bold text-green-600 mb-2">
+                  Login Successful!
+                </h1>
+                <p className="text-gray-600 text-sm">Redirecting you now...</p>
+              </div>
+              <div className="flex justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2">
+                  {t("welcomeBack")}
+                </h1>
+                <p className="text-gray-600 text-sm">{t("signInToContinue")}</p>
+              </div>
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                onKeyDown={handleKeyDown}
+                className="space-y-6"
+              >
+                <Controller
+                  control={control}
+                  name="email"
+                  render={({ field }) => (
+                    <div className="relative">
+                      <Input
+                        label={t("emailAddress")}
+                        placeholder={t("emailPlaceholder")}
+                        error={errors.email?.message}
+                        onClearError={() => clearErrors("email")}
+                        className="group-hover:shadow-md transition-all duration-200"
+                        type="email"
+                        onKeyDown={handleKeyDown}
+                        {...field}
+                      />
+                    </div>
+                  )}
+                />
 
-            <Controller
-              control={control}
-              name="password"
-              render={({ field }) => (
-                <div className="relative">
-                  <Input
-                    label={t("password")}
-                    placeholder={t("passwordPlaceholder")}
-                    error={errors.password?.message}
-                    onClearError={() => clearErrors("password")}
-                    className="group-hover:shadow-md transition-all duration-200"
-                    type="password"
-                    onKeyDown={handleKeyDown}
-                    {...field}
-                  />
-                </div>
-              )}
-            />
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({ field }) => (
+                    <div className="relative">
+                      <Input
+                        label={t("password")}
+                        placeholder={t("passwordPlaceholder")}
+                        error={errors.password?.message}
+                        onClearError={() => clearErrors("password")}
+                        className="group-hover:shadow-md transition-all duration-200"
+                        type="password"
+                        onKeyDown={handleKeyDown}
+                        {...field}
+                      />
+                    </div>
+                  )}
+                />
 
-            <Button
-              type="submit"
-              variant="primary"
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              <span className="flex items-center justify-center gap-2">
-                <LoginIcon className="w-5 h-5" />
-                {t("signIn")}
-              </span>
-            </Button>
-          </form>
-          {/* style create account link */}
-          <div className="flex justify-center mb-2 mt-4">
-            <Link
-              href={`/${locale}/register`}
-              className="text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
-            >
-              {t("createAccount")}
-            </Link>
-          </div>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <LoginIcon className="w-5 h-5" />
+                    {t("signIn")}
+                  </span>
+                </Button>
+              </form>
+              {/* style create account link */}
+              <div className="flex justify-center mb-2 mt-4">
+                <Link
+                  href={`/${locale}/register`}
+                  className="text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
+                >
+                  {t("createAccount")}
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </div>
       <LoadingOverlay show={isSubmitting} message="Signing in..." />

@@ -11,6 +11,8 @@ import * as yup from "yup";
 import authService from "@/services/auth";
 import Link from "next/link";
 import { useUser } from "@/contexts/UserContext";
+import { useState } from "react";
+
 interface Inputs {
   name: string;
   email: string;
@@ -18,6 +20,7 @@ interface Inputs {
   confirmPassword: string;
 }
 const RegisterPage = () => {
+  const [isRegisterSuccess, setIsRegisterSuccess] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
@@ -66,8 +69,14 @@ const RegisterPage = () => {
         data.name
       );
       if (res.id) {
+        // Set register success state to hide form
+        setIsRegisterSuccess(true);
         success("Account created successfully");
-        router.push(`/${locale}/login`);
+
+        // Wait a moment to show success message, then redirect
+        setTimeout(() => {
+          router.push(`/${locale}/login`);
+        }, 1500);
       } else {
         error(res.error);
       }
@@ -102,104 +111,137 @@ const RegisterPage = () => {
 
       <div className="w-full max-w-md mt-6">
         <div className="rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2">
-              Create Account
-            </h1>
-            <p className="text-gray-600 text-sm">Join CodeSnippets today</p>
-          </div>
-
-          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-              control={control}
-              name="name"
-              render={({ field }) => (
-                <div className="relative">
-                  <Input
-                    label="Name"
-                    placeholder="Enter your name"
-                    error={errors.name?.message}
-                    onClearError={() => clearErrors("name")}
-                    className="group-hover:shadow-md transition-all duration-200"
-                    type="text"
-                    {...field}
-                  />
+          {isRegisterSuccess ? (
+            <div className="text-center">
+              <div className="mb-6">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg
+                    className="w-8 h-8 text-green-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
                 </div>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="email"
-              render={({ field }) => (
-                <div className="relative">
-                  <Input
-                    label="Email"
-                    placeholder="you@example.com"
-                    error={errors.email?.message}
-                    onClearError={() => clearErrors("email")}
-                    className="group-hover:shadow-md transition-all duration-200"
-                    type="email"
-                    {...field}
-                  />
-                </div>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="password"
-              render={({ field }) => (
-                <div className="relative">
-                  <Input
-                    label="Password"
-                    placeholder="••••••••"
-                    error={errors.password?.message}
-                    onClearError={() => clearErrors("password")}
-                    className="group-hover:shadow-md transition-all duration-200"
-                    type="password"
-                    {...field}
-                  />
-                </div>
-              )}
-            />
-            <Controller
-              control={control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <div className="relative">
-                  <Input
-                    label="Confirm Password"
-                    placeholder="••••••••"
-                    error={errors.confirmPassword?.message}
-                    onClearError={() => clearErrors("confirmPassword")}
-                    className="group-hover:shadow-md transition-all duration-200"
-                    type="password"
-                    {...field}
-                  />
-                </div>
-              )}
-            />
-
-            <Button
-              type="submit"
-              variant="primary"
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              <span className="flex items-center justify-center gap-2">
-                <PlusIcon className="w-5 h-5" />
-                {isSubmitting ? "Creating..." : "Create Account"}
-              </span>
-            </Button>
-            <div className="flex justify-center mb-2 mt-4">
-              <Link
-                href={`/${locale}/login`}
-                className="text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
-              >
-                Already have an account? Sign in
-              </Link>
+                <h1 className="text-2xl font-bold text-green-600 mb-2">
+                  Account Created!
+                </h1>
+                <p className="text-gray-600 text-sm">
+                  Redirecting to login page...
+                </p>
+              </div>
+              <div className="flex justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>
             </div>
-          </form>
+          ) : (
+            <>
+              <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2">
+                  Create Account
+                </h1>
+                <p className="text-gray-600 text-sm">Join CodeSnippets today</p>
+              </div>
+
+              <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+                <Controller
+                  control={control}
+                  name="name"
+                  render={({ field }) => (
+                    <div className="relative">
+                      <Input
+                        label="Name"
+                        placeholder="Enter your name"
+                        error={errors.name?.message}
+                        onClearError={() => clearErrors("name")}
+                        className="group-hover:shadow-md transition-all duration-200"
+                        type="text"
+                        {...field}
+                      />
+                    </div>
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name="email"
+                  render={({ field }) => (
+                    <div className="relative">
+                      <Input
+                        label="Email"
+                        placeholder="you@example.com"
+                        error={errors.email?.message}
+                        onClearError={() => clearErrors("email")}
+                        className="group-hover:shadow-md transition-all duration-200"
+                        type="email"
+                        {...field}
+                      />
+                    </div>
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({ field }) => (
+                    <div className="relative">
+                      <Input
+                        label="Password"
+                        placeholder="••••••••"
+                        error={errors.password?.message}
+                        onClearError={() => clearErrors("password")}
+                        className="group-hover:shadow-md transition-all duration-200"
+                        type="password"
+                        {...field}
+                      />
+                    </div>
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <div className="relative">
+                      <Input
+                        label="Confirm Password"
+                        placeholder="••••••••"
+                        error={errors.confirmPassword?.message}
+                        onClearError={() => clearErrors("confirmPassword")}
+                        className="group-hover:shadow-md transition-all duration-200"
+                        type="password"
+                        {...field}
+                      />
+                    </div>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <PlusIcon className="w-5 h-5" />
+                    {isSubmitting ? "Creating..." : "Create Account"}
+                  </span>
+                </Button>
+                <div className="flex justify-center mb-2 mt-4">
+                  <Link
+                    href={`/${locale}/login`}
+                    className="text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
+                  >
+                    Already have an account? Sign in
+                  </Link>
+                </div>
+              </form>
+            </>
+          )}
         </div>
       </div>
     </div>
