@@ -9,6 +9,8 @@ import Input from "@/components/ui/Input";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import { InlineSpinner, LoadingOverlay } from "@/components/ui/Loading";
+import { useToast } from "@/hooks/useToast";
 
 const LoginPage = () => {
   interface Inputs {
@@ -24,7 +26,7 @@ const LoginPage = () => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     clearErrors,
   } = useForm<Inputs>({
     resolver: yupResolver(schema),
@@ -39,7 +41,7 @@ const LoginPage = () => {
   const pathname = usePathname();
   const locale = useLocale();
   const t = useTranslations("login");
-
+  const { error } = useToast();
   const switchLanguage = (newLocale: string) => {
     // Remove current locale from pathname
     const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
@@ -48,9 +50,25 @@ const LoginPage = () => {
   };
 
   const onSubmit = async (data: Inputs) => {
-    const res = await authService.login(data.email, data.password);
-    if (res.id) {
-      router.push(`/${locale}/home`);
+    try {
+      const res = await authService.login(data.email, data.password);
+      if (res.id) {
+        router.push(`/${locale}/home`);
+      }
+    } catch (err) {
+      error(
+        typeof err === "string"
+          ? err
+          : err instanceof Error
+          ? err.message
+          : "An unknown error occurred"
+      );
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleSubmit(onSubmit)();
     }
   };
 
@@ -93,7 +111,11 @@ const LoginPage = () => {
             </h1>
             <p className="text-gray-600 text-sm">{t("signInToContinue")}</p>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            onKeyDown={handleKeyDown}
+            className="space-y-6"
+          >
             <Controller
               control={control}
               name="email"
@@ -106,6 +128,7 @@ const LoginPage = () => {
                     onClearError={() => clearErrors("email")}
                     className="group-hover:shadow-md transition-all duration-200"
                     type="email"
+                    onKeyDown={handleKeyDown}
                     {...field}
                   />
                 </div>
@@ -124,6 +147,7 @@ const LoginPage = () => {
                     onClearError={() => clearErrors("password")}
                     className="group-hover:shadow-md transition-all duration-200"
                     type="password"
+                    onKeyDown={handleKeyDown}
                     {...field}
                   />
                 </div>
@@ -164,6 +188,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+      <LoadingOverlay show={isSubmitting} message="Signing in..." />
     </div>
   );
 };

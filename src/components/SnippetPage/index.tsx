@@ -112,7 +112,7 @@ const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
           snippets.map((snip) => (
             <li
               key={snip.id}
-              className="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.01]"
+              className="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 "
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">

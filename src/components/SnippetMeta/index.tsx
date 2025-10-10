@@ -13,7 +13,6 @@ const SnippetMeta = ({
   user,
   code,
   previewLength = 240,
-  isTopicPage = false,
   isLanguagePage = false,
   isUserProfilePage = false,
 }: {
@@ -22,7 +21,6 @@ const SnippetMeta = ({
   user?: UserRef;
   code?: string;
   previewLength?: number;
-  isTopicPage?: boolean;
   isLanguagePage?: boolean;
   isUserProfilePage?: boolean;
 }) => {
@@ -52,26 +50,24 @@ const SnippetMeta = ({
           </Link>
         </div>
       )}
-      {!isTopicPage && (
-        <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-          <p>Topics:</p>
-          <div className="flex flex-wrap gap-2">
-            {(topics ?? []).length === 0 ? (
-              <UITag>—</UITag>
-            ) : (
-              (topics ?? []).map((t) => (
-                <Link
-                  key={t.topic.id}
-                  href={`/tags/topic/${t.topic.id}`}
-                  className="hover:underline"
-                >
-                  <UITag>{t.topic.name}</UITag>
-                </Link>
-              ))
-            )}
-          </div>
+      <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+        <p>Topics:</p>
+        <div className="flex flex-wrap gap-2">
+          {(topics ?? []).length === 0 ? (
+            <UITag>—</UITag>
+          ) : (
+            (topics ?? []).map((t) => (
+              <Link
+                key={t.topic.id}
+                href={`/tags/topic/${t.topic.id}`}
+                className="hover:underline"
+              >
+                <UITag>{t.topic.name}</UITag>
+              </Link>
+            ))
+          )}
         </div>
-      )}
+      </div>
       {typeof code === "string" ? (
         <div className="bg-gray-100 rounded-xl p-4 font-mono text-sm">
           <div className="flex items-center justify-between mb-2">

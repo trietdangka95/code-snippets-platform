@@ -31,7 +31,7 @@ const RegisterPage = () => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     clearErrors,
   } = useForm<Inputs>({
     resolver: yupResolver(
@@ -59,16 +59,26 @@ const RegisterPage = () => {
   });
 
   const onSubmit = async (data: Inputs) => {
-    const res = await authService.register(
-      data.email,
-      data.password,
-      data.name
-    );
-    if (res.id) {
-      success("Account created successfully");
-      router.push(`/${locale}/login`);
-    } else {
-      error(res.error);
+    try {
+      const res = await authService.register(
+        data.email,
+        data.password,
+        data.name
+      );
+      if (res.id) {
+        success("Account created successfully");
+        router.push(`/${locale}/login`);
+      } else {
+        error(res.error);
+      }
+    } catch (err) {
+      error(
+        typeof err === "string"
+          ? err
+          : err instanceof Error
+          ? err.message
+          : "An unknown error occurred"
+      );
     }
   };
   return (
@@ -202,7 +212,7 @@ const RegisterPage = () => {
                     d="M12 4v16m8-8H4"
                   />
                 </svg>
-                {loading ? "Creating..." : "Create Account"}
+                {isSubmitting ? "Creating..." : "Create Account"}
               </span>
             </Button>
             <div className="flex justify-center mb-2 mt-4">

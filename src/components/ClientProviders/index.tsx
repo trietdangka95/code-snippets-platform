@@ -3,6 +3,7 @@
 import { ToastProvider } from "@/contexts/ToastContext";
 import ConditionalLayout from "@/components/ConditionalLayout";
 import { NextIntlClientProvider } from "next-intl";
+import { ToastContainer } from "@/components/ui/ToastContainer";
 
 interface ClientProvidersProps {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ export default function ClientProviders({
     <NextIntlClientProvider messages={messages} locale={locale}>
       <ToastProvider>
         <ConditionalLayout>{children}</ConditionalLayout>
+        <ToastContainer />
       </ToastProvider>
     </NextIntlClientProvider>
   );

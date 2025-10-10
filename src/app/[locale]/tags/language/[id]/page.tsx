@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Metadata } from "next";
 import LanguageColor from "@/components/LanguageColor";
 import SnippetMeta from "@/components/SnippetMeta";
+import { prisma } from "@/lib/prisma";
 
 type ApiSnippet = {
   id: string;
@@ -29,14 +30,31 @@ async function fetchByLanguage(
   return res.json() as Promise<{ snippets: ApiSnippet[] }>;
 }
 
+async function fetchLanguageById(
+  id: string
+): Promise<{ id: string; name: string } | null> {
+  try {
+    const language = await prisma.language.findUnique({
+      where: { id },
+      select: { id: true, name: true },
+    });
+    return language;
+  } catch (error) {
+    console.error("Error fetching language:", error);
+    return null;
+  }
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: { id: string };
 }): Promise<Metadata> {
+  const language = await fetchLanguageById(params.id);
+  const languageName = language?.name ?? "Unknown Language";
+
   const data = await fetchByLanguage(params.id);
   const snippets = data.snippets ?? [];
-  const languageName = snippets[0]?.language?.name ?? "Unknown Language";
   const snippetCount = snippets.length;
 
   return {
@@ -73,18 +91,20 @@ export default async function LanguageTagPage({
   params: { id: string };
 }) {
   const { id } = params;
+  const language = await fetchLanguageById(id);
+  const languageName = language?.name ?? "Unknown Language";
+
   const data = await fetchByLanguage(id);
   const snippets = data.snippets ?? [];
-  const name = snippets[0].language?.name ?? "";
   return (
     <section className="w-full max-w-7xl mx-auto px-6 py-8 mt-10 rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm">
       <div className="mb-8">
         <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent">
-          Language
+          {languageName}
         </h1>
         <div className="flex items-center gap-2">
           <p className="text-gray-600 text-sm">Filtered by language:</p>
-          <LanguageColor language={name} />
+          <LanguageColor language={languageName} />
         </div>
       </div>
 
@@ -97,7 +117,7 @@ export default async function LanguageTagPage({
           snippets.map((snip: ApiSnippet) => (
             <li
               key={snip.id}
-              className="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.01]"
+              className="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200"
             >
               <div className="mb-3">
                 <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">

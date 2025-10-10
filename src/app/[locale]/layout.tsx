@@ -1,7 +1,19 @@
 import { notFound } from "next/navigation";
 import { locales } from "@/i18n-config";
-import { getMessages } from "next-intl/server";
 import ClientProviders from "@/components/ClientProviders";
+import enMessages from "../../../messages/en.json";
+import viMessages from "../../../messages/vi.json";
+import { Geist, Geist_Mono } from "next/font/google";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 type Props = {
   children: React.ReactNode;
@@ -15,26 +27,24 @@ export function generateStaticParams() {
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
 
-  // Validate that the incoming `locale` parameter is valid
   if (!locales.includes(locale as (typeof locales)[number])) {
     notFound();
   }
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
+  // Load messages directly
   let messages: Record<string, unknown> = {};
-  try {
-    messages = await getMessages({ locale });
-  } catch (error) {
-    console.error("Failed to load messages:", error);
-    // Fallback to empty messages
-    messages = {};
+  if (locale === "en") {
+    messages = enMessages;
+  } else if (locale === "vi") {
+    messages = viMessages;
   }
 
   return (
-    <html lang={locale || "en"}>
-      <body>
-        <ClientProviders messages={messages} locale={locale}>
+    <html lang={locale}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ClientProviders locale={locale} messages={messages}>
           {children}
         </ClientProviders>
       </body>
