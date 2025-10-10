@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
+export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
   const token = req.cookies?.get?.("token")?.value;

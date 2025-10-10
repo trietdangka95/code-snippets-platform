@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { extractUserId } from "@/lib/auth";
+export const runtime = "nodejs";
 
 export async function PUT(
   req: Request,
