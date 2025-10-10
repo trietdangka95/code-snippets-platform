@@ -169,5 +169,6 @@ src/
 - Chưa fully translate
 - Security BE chưa implement(Rate limit, JWT...)
 - Chưa implement Forgot password
+- Nếu truy cập bằng mobile (chưa hiển thị tốt cho Darkmode)
   **Phát triển bởi**: Triet Dang
   **Phiên bản**: 0.1.0
