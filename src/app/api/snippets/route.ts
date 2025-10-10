@@ -61,6 +61,12 @@ export async function POST(req: Request) {
 // GET /api/snippets?languageId=&topicId=
 export async function GET(req: Request) {
   try {
+    // Enforce auth for listing snippets
+    const userId = extractUserId(req);
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const url = new URL(req.url);
     const languageId = url.searchParams.get("languageId") ?? undefined;
     const topicId = url.searchParams.get("topicId") ?? undefined;

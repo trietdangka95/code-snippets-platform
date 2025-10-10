@@ -42,11 +42,17 @@ export default function middleware(req: NextRequest) {
   const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
   const isAuthPage = pathnameWithoutLocale.startsWith("/login");
   const unauthRoutes = ["/login", "/register", "/robots.txt", "/sitemap.xml"];
-  const publicRoutes = ["/", "/about", "/snippets", "/tags", "/u"];
+  // Do NOT include "/" here; handle it as exact match to avoid matching everything
+  const publicPrefixes = ["/about", "/tags", "/u"]; // keep public pages only
 
-  const isPublic = [...publicRoutes, ...unauthRoutes].some((route) =>
+  const isRootPublic = pathnameWithoutLocale === "/";
+  const isPublicPrefix = publicPrefixes.some((route) =>
     pathnameWithoutLocale.startsWith(route)
   );
+  const isUnauthRoute = unauthRoutes.some((route) =>
+    pathnameWithoutLocale.startsWith(route)
+  );
+  const isPublic = isRootPublic || isPublicPrefix || isUnauthRoute;
 
   // ✅ Bot được phép crawl public
   if (isBot && isPublic) return intlMiddleware(req);
