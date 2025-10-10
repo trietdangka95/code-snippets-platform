@@ -127,7 +127,7 @@ const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                 <p>{t("createdBy")}:</p>
                 <Link
-                  href={`/u/${snip.user?.id ?? ""}`}
+                  href={`/user/${snip.user?.id ?? ""}`}
                   className="hover:underline text-blue-700"
                 >
                   {snip.user?.name || t("unknown")}

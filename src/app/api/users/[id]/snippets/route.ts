@@ -8,18 +8,25 @@ export async function GET(
 ) {
   try {
     const { id: userId } = await params;
-    const user = await prisma.user.findUnique({
+
+    // Single query to get user and snippets together
+    const result = await prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, name: true },
+      select: {
+        id: true,
+        name: true,
+        snippets: {
+          include: { language: true, topics: { include: { topic: true } } },
+          orderBy: { createdAt: "desc" },
+        },
+      },
     });
-    if (!user) {
+
+    if (!result) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
-    const snippets = await prisma.snippet.findMany({
-      where: { userId },
-      include: { language: true, topics: { include: { topic: true } } },
-      orderBy: { createdAt: "desc" },
-    });
+
+    const { snippets, ...user } = result;
     return NextResponse.json({ user, snippets });
   } catch (error) {
     console.error(error);

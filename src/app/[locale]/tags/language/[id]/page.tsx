@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import LanguageColor from "@/components/LanguageColor";
 import SnippetMeta from "@/components/SnippetMeta";
 import { prisma } from "@/lib/prisma";
+import { Suspense } from "react";
+import { InlineSpinner } from "@/components/ui/Loading";
 export const runtime = "nodejs";
 
 type ApiSnippet = {
@@ -25,7 +27,8 @@ async function fetchByLanguage(
   const base =
     envBase && envBase.startsWith("http") ? envBase : `${proto}://${host}`;
   const res = await fetch(`${base}/api/snippets?languageId=${id}`, {
-    cache: "no-store",
+    cache: "force-cache",
+    next: { revalidate: 60 }, // Cache for 60 seconds
   });
   if (!res.ok) return { snippets: [] } as { snippets: ApiSnippet[] };
   return res.json() as Promise<{ snippets: ApiSnippet[] }>;
@@ -52,34 +55,21 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const language = await fetchLanguageById(id);
-  const languageName = language?.name ?? "Unknown Language";
 
-  const data = await fetchByLanguage(id);
-  const snippets = data.snippets ?? [];
-  const snippetCount = snippets.length;
-
+  // Simplified metadata without fetching data to avoid double API calls
   return {
-    title: `${languageName} Code Snippets`,
-    description: `Browse ${snippetCount} code snippets in ${languageName}. Find examples, tutorials, and solutions for ${languageName} programming.`,
-    keywords: [
-      languageName,
-      `${languageName} code snippets`,
-      `${languageName} examples`,
-      `${languageName} programming`,
-      "code snippets",
-      "programming",
-      "developer",
-    ],
+    title: `Language Code Snippets`,
+    description: `Browse code snippets by programming language. Find examples, tutorials, and solutions for various programming languages.`,
+    keywords: ["code snippets", "programming", "developer", "language"],
     openGraph: {
-      title: `${languageName} Code Snippets`,
-      description: `Browse ${snippetCount} code snippets in ${languageName}`,
+      title: `Language Code Snippets`,
+      description: `Browse code snippets by programming language`,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${languageName} Code Snippets`,
-      description: `Browse ${snippetCount} code snippets in ${languageName}`,
+      title: `Language Code Snippets`,
+      description: `Browse code snippets by programming language`,
     },
     alternates: {
       canonical: `/tags/language/${id}`,
@@ -87,17 +77,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function LanguageTagPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+async function LanguageTagContent({ id }: { id: string }) {
   const language = await fetchLanguageById(id);
   const languageName = language?.name ?? "Unknown Language";
 
   const data = await fetchByLanguage(id);
   const snippets = data.snippets ?? [];
+
   return (
     <section className="w-full max-w-[calc(100%-2rem)] sm:max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 mt-6 sm:mt-10 rounded-2xl bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm overflow-hidden sm:overflow-visible">
       <div className="mb-8">
@@ -131,5 +117,27 @@ export default async function LanguageTagPage({
         )}
       </ul>
     </section>
+  );
+}
+
+export default async function LanguageTagPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full max-w-[calc(100%-2rem)] sm:max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 mt-6 sm:mt-10 rounded-2xl bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm overflow-hidden sm:overflow-visible">
+          <div className="flex items-center justify-center py-12">
+            <InlineSpinner message="Loading language snippets..." />
+          </div>
+        </div>
+      }
+    >
+      <LanguageTagContent id={id} />
+    </Suspense>
   );
 }

@@ -40,7 +40,7 @@ const SnippetMeta = ({
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <p>{t("createdBy")}:</p>
             <Link
-              href={`/${locale}/u/${user?.id ?? ""}`}
+              href={`/${locale}/user/${user?.id ?? ""}`}
               className="hover:underline text-blue-700"
             >
               {user?.name || "Unknown"}

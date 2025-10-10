@@ -44,9 +44,7 @@ const LoginPage = () => {
   const t = useTranslations("login");
   const { error } = useToast();
   const switchLanguage = (newLocale: string) => {
-    // Remove current locale from pathname
     const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
-    // Navigate to new locale
     router.push(`/${newLocale}${pathnameWithoutLocale}`);
   };
 

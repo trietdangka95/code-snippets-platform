@@ -2,6 +2,8 @@
 import { headers } from "next/headers";
 import { Metadata } from "next";
 import SnippetMeta from "@/components/SnippetMeta";
+import { Suspense } from "react";
+import { InlineSpinner } from "@/components/ui/Loading";
 
 export const runtime = "nodejs";
 
@@ -25,7 +27,8 @@ async function fetchUserSnippets(
   const base =
     envBase && envBase.startsWith("http") ? envBase : `${proto}://${host}`;
   const res = await fetch(`${base}/api/users/${userId}/snippets`, {
-    cache: "no-store",
+    cache: "force-cache",
+    next: { revalidate: 60 }, // Cache for 60 seconds
   });
   if (!res.ok) {
     return { snippets: [] } as { user?: ApiUser; snippets: ApiSnippet[] };
@@ -39,46 +42,29 @@ export async function generateMetadata({
   params: Promise<{ userId: string }>;
 }): Promise<Metadata> {
   const { userId } = await params;
-  const data = await fetchUserSnippets(userId);
-  const user = data.user;
-  const snippets = data.snippets ?? [];
-  const userName = user?.name || "Anonymous User";
-  const snippetCount = snippets.length;
 
+  // Simplified metadata without fetching data to avoid double API calls
   return {
-    title: `${userName}'s Code Snippets`,
-    description: `Browse ${snippetCount} code snippets by ${userName}. Explore ${userName}'s programming examples, solutions, and contributions to the developer community.`,
-    keywords: [
-      userName,
-      `${userName} code snippets`,
-      `${userName} programming`,
-      "code snippets",
-      "programming",
-      "developer",
-      "portfolio",
-    ],
+    title: `User Profile`,
+    description: `Browse code snippets by this user. Explore programming examples, solutions, and contributions to the developer community.`,
+    keywords: ["code snippets", "programming", "developer", "portfolio"],
     openGraph: {
-      title: `${userName}'s Code Snippets`,
-      description: `Browse ${snippetCount} code snippets by ${userName}`,
+      title: `User Profile`,
+      description: `Browse code snippets by this user`,
       type: "profile",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${userName}'s Code Snippets`,
-      description: `Browse ${snippetCount} code snippets by ${userName}`,
+      title: `User Profile`,
+      description: `Browse code snippets by this user`,
     },
     alternates: {
-      canonical: `/u/${userId}`,
+      canonical: `/user/${userId}`,
     },
   };
 }
 
-export default async function UserProfilePage({
-  params,
-}: {
-  params: Promise<{ userId: string }>;
-}) {
-  const { userId } = await params;
+async function UserProfileContent({ userId }: { userId: string }) {
   const data = await fetchUserSnippets(userId);
   const snippets = data.snippets ?? [];
   const user = data.user;
@@ -114,5 +100,27 @@ export default async function UserProfilePage({
         )}
       </ul>
     </section>
+  );
+}
+
+export default async function UserProfilePage({
+  params,
+}: {
+  params: Promise<{ userId: string }>;
+}) {
+  const { userId } = await params;
+
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full max-w-[calc(100%-2rem)] sm:max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 mt-6 sm:mt-10 rounded-2xl bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm overflow-hidden sm:overflow-visible">
+          <div className="flex items-center justify-center py-12">
+            <InlineSpinner message="Loading user profile..." />
+          </div>
+        </div>
+      }
+    >
+      <UserProfileContent userId={userId} />
+    </Suspense>
   );
 }

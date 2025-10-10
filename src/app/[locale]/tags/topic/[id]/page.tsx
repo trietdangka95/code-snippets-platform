@@ -3,6 +3,8 @@ import { headers } from "next/headers";
 import { Metadata } from "next";
 import SnippetMeta from "@/components/SnippetMeta";
 import { prisma } from "@/lib/prisma";
+import { Suspense } from "react";
+import { InlineSpinner } from "@/components/ui/Loading";
 export const runtime = "nodejs";
 
 type ApiSnippet = {
@@ -22,7 +24,8 @@ async function fetchByTopic(id: string): Promise<{ snippets: ApiSnippet[] }> {
   const base =
     envBase && envBase.startsWith("http") ? envBase : `${proto}://${host}`;
   const res = await fetch(`${base}/api/snippets?topicId=${id}`, {
-    cache: "no-store",
+    cache: "force-cache",
+    next: { revalidate: 60 }, // Cache for 60 seconds
   });
   if (!res.ok) return { snippets: [] } as { snippets: ApiSnippet[] };
   return res.json() as Promise<{ snippets: ApiSnippet[] }>;
@@ -49,34 +52,21 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const topic = await fetchTopicById(id);
-  const topicName = topic?.name ?? "Unknown Topic";
 
-  const data = await fetchByTopic(id);
-  const snippets = data.snippets ?? [];
-  const snippetCount = snippets.length;
-
+  // Simplified metadata without fetching data to avoid double API calls
   return {
-    title: `${topicName} Code Snippets`,
-    description: `Browse ${snippetCount} code snippets about ${topicName}. Find examples, tutorials, and solutions related to ${topicName}.`,
-    keywords: [
-      topicName,
-      `${topicName} code snippets`,
-      `${topicName} examples`,
-      `${topicName} programming`,
-      "code snippets",
-      "programming",
-      "developer",
-    ],
+    title: `Topic Code Snippets`,
+    description: `Browse code snippets by topic. Find examples, tutorials, and solutions related to various programming topics.`,
+    keywords: ["code snippets", "programming", "developer", "topic"],
     openGraph: {
-      title: `${topicName} Code Snippets`,
-      description: `Browse ${snippetCount} code snippets about ${topicName}`,
+      title: `Topic Code Snippets`,
+      description: `Browse code snippets by topic`,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${topicName} Code Snippets`,
-      description: `Browse ${snippetCount} code snippets about ${topicName}`,
+      title: `Topic Code Snippets`,
+      description: `Browse code snippets by topic`,
     },
     alternates: {
       canonical: `/tags/topic/${id}`,
@@ -84,17 +74,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function TopicTagPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+async function TopicTagContent({ id }: { id: string }) {
   const topic = await fetchTopicById(id);
   const topicName = topic?.name ?? "Unknown Topic";
 
   const data = await fetchByTopic(id);
   const snippets = data.snippets ?? [];
+
   return (
     <section className="w-full max-w-[calc(100%-2rem)] sm:max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 mt-6 sm:mt-10 rounded-2xl bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm overflow-hidden sm:overflow-visible">
       <div className="mb-8">
@@ -124,5 +110,27 @@ export default async function TopicTagPage({
         )}
       </ul>
     </section>
+  );
+}
+
+export default async function TopicTagPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full max-w-[calc(100%-2rem)] sm:max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 mt-6 sm:mt-10 rounded-2xl bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm overflow-hidden sm:overflow-visible">
+          <div className="flex items-center justify-center py-12">
+            <InlineSpinner message="Loading topic snippets..." />
+          </div>
+        </div>
+      }
+    >
+      <TopicTagContent id={id} />
+    </Suspense>
   );
 }

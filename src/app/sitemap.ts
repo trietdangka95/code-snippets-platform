@@ -59,7 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
 
     const userPages: MetadataRoute.Sitemap = users.map((user) => ({
-      url: `${baseUrl}/u/${user.id}`,
+      url: `${baseUrl}/user/${user.id}`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.6,
