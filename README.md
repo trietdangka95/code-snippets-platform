@@ -168,6 +168,6 @@ src/
 - Register account chưa validate email. (hiện tại chỉ cần đúng regex email là nhận)
 - Chưa fully translate
 - Security BE chưa implement(Rate limit, JWT...)
-
-**Phát triển bởi**: Triet Dang
-**Phiên bản**: 0.1.0
+- Chưa implement Forgot password
+  **Phát triển bởi**: Triet Dang
+  **Phiên bản**: 0.1.0
