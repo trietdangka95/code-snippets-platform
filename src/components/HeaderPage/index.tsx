@@ -13,7 +13,7 @@ import MobileMenuPanel from "./MobileMenuPanel";
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user: currentUser } = useUser();
+  const { user: currentUser, refetch } = useUser();
   const locale = useLocale();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -35,6 +35,8 @@ const Header = () => {
       method: "POST",
     });
     if (res.ok) {
+      // Refetch user data to update the context
+      await refetch();
       router.push(`/${locale}/login`);
     }
   };

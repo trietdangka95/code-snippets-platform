@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import authService from "@/services/auth";
 import Link from "next/link";
+import { useUser } from "@/contexts/UserContext";
 interface Inputs {
   name: string;
   email: string;

@@ -12,6 +12,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { LoadingOverlay } from "@/components/ui/Loading";
 import { useToast } from "@/hooks/useToast";
 import { ChevronDownIcon, LoginIcon } from "@/components/Icons";
+import { useUser } from "@/contexts/UserContext";
 
 const LoginPage = () => {
   interface Inputs {
@@ -43,6 +44,7 @@ const LoginPage = () => {
   const locale = useLocale();
   const t = useTranslations("login");
   const { error } = useToast();
+  const { refetch } = useUser();
   const switchLanguage = (newLocale: string) => {
     const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
     router.push(`/${newLocale}${pathnameWithoutLocale}`);
@@ -52,6 +54,8 @@ const LoginPage = () => {
     try {
       const res = await authService.login(data.email, data.password);
       if (res.id) {
+        // Refetch user data to update the context
+        await refetch();
         router.push(`/${locale}/home`);
       }
     } catch (err) {
