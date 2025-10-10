@@ -137,10 +137,6 @@ export default async function SnippetDetailPage({
     <section className="w-full max-w-7xl mx-auto px-6 py-8 mt-10 rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm">
       <article>
         <div className="mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-4">
-            {snippet.title || "Untitled Snippet"}
-          </h1>
-
           <SnippetDetailWrapper snippet={snippet} />
         </div>
       </article>

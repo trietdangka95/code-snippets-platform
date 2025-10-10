@@ -8,6 +8,7 @@ type TopicEdge = { topic: { id: string; name: string } }[] | undefined;
 type UserRef = { id: string; name: string | null } | null | undefined;
 
 const SnippetMeta = ({
+  title,
   language,
   topics,
   user,
@@ -16,6 +17,7 @@ const SnippetMeta = ({
   isLanguagePage = false,
   isUserProfilePage = false,
 }: {
+  title?: string;
   language?: LanguageRef;
   topics?: TopicEdge;
   user?: UserRef;
@@ -25,7 +27,10 @@ const SnippetMeta = ({
   isUserProfilePage?: boolean;
 }) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full max-w-7xl mx-auto px-6 py-8 rounded-2xl p-8 bg-gradient-to-br from-white via-gray-50 to-blue-50 shadow-xl border border-gray-200/50 backdrop-blur-sm">
+      <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent">
+        {title}
+      </h1>
       {!isUserProfilePage && (
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2 text-sm text-gray-500">

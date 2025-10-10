@@ -1,3 +1,5 @@
+import { LightningIcon, CheckCircleIcon } from "@/components/Icons";
+
 const MissionSection = () => {
   return (
     <div className="grid lg:grid-cols-2 gap-12 mb-16">
@@ -5,19 +7,7 @@ const MissionSection = () => {
       <div className="rounded-2xl p-8 bg-gradient-to-br from-white via-blue-50 to-indigo-50 shadow-xl border border-blue-200/50 backdrop-blur-sm">
         <div className="flex items-center mb-6">
           <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mr-4">
-            <svg
-              className="w-6 h-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              />
-            </svg>
+            <LightningIcon className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900">Our Mission</h2>
         </div>
@@ -36,19 +26,7 @@ const MissionSection = () => {
       <div className="rounded-2xl p-8 bg-gradient-to-br from-white via-purple-50 to-pink-50 shadow-xl border border-purple-200/50 backdrop-blur-sm">
         <div className="flex items-center mb-6">
           <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-4">
-            <svg
-              className="w-6 h-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <CheckCircleIcon className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900">Key Features</h2>
         </div>

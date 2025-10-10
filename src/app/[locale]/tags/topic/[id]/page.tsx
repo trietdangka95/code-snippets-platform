@@ -109,17 +109,9 @@ export default async function TopicTagPage({
           </li>
         ) : (
           snippets.map((snip: ApiSnippet) => (
-            <li
-              key={snip.id}
-              className="group bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 "
-            >
-              <div className="mb-3">
-                <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
-                  {snip.title || "Untitled"}
-                </h3>
-              </div>
-
+            <li key={snip.id}>
               <SnippetMeta
+                title={snip.title}
                 language={snip.language}
                 topics={snip.topics}
                 user={snip.user}

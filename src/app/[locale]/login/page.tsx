@@ -9,8 +9,9 @@ import Input from "@/components/ui/Input";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { InlineSpinner, LoadingOverlay } from "@/components/ui/Loading";
+import { LoadingOverlay } from "@/components/ui/Loading";
 import { useToast } from "@/hooks/useToast";
+import { ChevronDownIcon, LoginIcon } from "@/components/Icons";
 
 const LoginPage = () => {
   interface Inputs {
@@ -86,19 +87,7 @@ const LoginPage = () => {
             <option value="vi">Tiếng Việt</option>
           </select>
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <svg
-              className="w-4 h-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+            <ChevronDownIcon className="w-4 h-4 text-gray-400" />
           </div>
         </div>
       </div>
@@ -160,19 +149,7 @@ const LoginPage = () => {
               className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <span className="flex items-center justify-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                  />
-                </svg>
+                <LoginIcon className="w-5 h-5" />
                 {t("signIn")}
               </span>
             </Button>

@@ -24,6 +24,7 @@ const SnippetDetailWrapper = ({ snippet }: SnippetDetailWrapperProps) => {
     <>
       {!isEditing && (
         <SnippetMeta
+          title={snippet.title}
           language={snippet.language}
           topics={snippet.topics}
           user={snippet.user}
