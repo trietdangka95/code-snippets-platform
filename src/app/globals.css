@@ -24,3 +24,22 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
+
+/* Improve text contrast on mobile devices */
+@media (max-width: 768px) {
+  .text-gray-400 {
+    color: rgb(75 85 99) !important; /* text-gray-600 */
+  }
+
+  .text-gray-500 {
+    color: rgb(55 65 81) !important; /* text-gray-700 */
+  }
+
+  .text-gray-600 {
+    color: rgb(31 41 55) !important; /* text-gray-800 */
+  }
+
+  .text-gray-700 {
+    color: rgb(17 24 39) !important; /* text-gray-900 */
+  }
+}

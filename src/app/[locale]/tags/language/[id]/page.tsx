@@ -91,14 +91,14 @@ async function LanguageTagContent({ id }: { id: string }) {
           {languageName}
         </h1>
         <div className="flex items-center gap-2">
-          <p className="text-gray-600 text-sm">Filtered by language:</p>
+          <p className="text-gray-700 text-sm">Filtered by language:</p>
           <LanguageColor language={languageName} />
         </div>
       </div>
 
       <ul className="space-y-6">
         {snippets.length === 0 ? (
-          <li className="text-center text-sm text-gray-500">
+          <li className="text-center text-sm text-gray-600">
             No snippets found.
           </li>
         ) : (

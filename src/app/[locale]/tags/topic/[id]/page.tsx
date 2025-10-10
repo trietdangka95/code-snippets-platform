@@ -87,12 +87,12 @@ async function TopicTagContent({ id }: { id: string }) {
         <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent">
           Topic
         </h1>
-        <p className="text-gray-600 text-sm">Filtered by topic: {topicName}</p>
+        <p className="text-gray-700 text-sm">Filtered by topic: {topicName}</p>
       </div>
 
       <ul className="space-y-6">
         {snippets.length === 0 ? (
-          <li className="text-center text-sm text-gray-500">
+          <li className="text-center text-sm text-gray-600">
             No snippets found.
           </li>
         ) : (

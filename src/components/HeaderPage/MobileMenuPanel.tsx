@@ -68,7 +68,7 @@ const MobileMenuPanel = ({
 
         {/* Language Switcher */}
         <div className="px-4 py-3">
-          <div className="text-sm font-medium text-gray-500 mb-2">Language</div>
+          <div className="text-sm font-medium text-gray-700 mb-2">Language</div>
           <LanguageSwitcher />
         </div>
 
@@ -85,7 +85,7 @@ const MobileMenuPanel = ({
                 <p className="font-medium text-gray-900">
                   {currentUser.name || t("user")}
                 </p>
-                <p className="text-sm text-gray-500">{t("hello")}</p>
+                <p className="text-sm text-gray-600">{t("hello")}</p>
               </div>
             </div>
             <button

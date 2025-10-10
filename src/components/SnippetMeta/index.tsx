@@ -37,7 +37,7 @@ const SnippetMeta = ({
       </h1>
       {!isUserProfilePage && (
         <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
             <p>{t("createdBy")}:</p>
             <Link
               href={`/${locale}/user/${user?.id ?? ""}`}
@@ -49,7 +49,7 @@ const SnippetMeta = ({
         </div>
       )}
       {!isLanguagePage && (
-        <div className="flex items-center gap-2 text-sm text-gray-500">
+        <div className="flex items-center gap-2 text-sm text-gray-600">
           <p>{t("programmingLanguage")}:</p>
           <Link
             href={`/${locale}/tags/language/${language?.id ?? ""}`}
@@ -59,7 +59,7 @@ const SnippetMeta = ({
           </Link>
         </div>
       )}
-      <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+      <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
         <p>{t("topics")}:</p>
         <div className="flex flex-wrap gap-2">
           {(topics ?? []).length === 0 ? (

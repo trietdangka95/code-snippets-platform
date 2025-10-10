@@ -95,7 +95,7 @@ const CodeSnippetsPage = ({ refreshToken }: { refreshToken?: number }) => {
             <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2">
               {t("title")}
             </h2>
-            <p className="text-gray-600 text-sm">{t("subtitle")}</p>
+            <p className="text-gray-700 text-sm">{t("subtitle")}</p>
           </div>
         </div>
       </div>
