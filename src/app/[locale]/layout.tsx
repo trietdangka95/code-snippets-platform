@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { locales } from "@/i18n-config";
+import { getMessages } from "next-intl/server";
 import ClientProviders from "@/components/ClientProviders";
 
 type Props = {
@@ -19,17 +20,12 @@ export default async function LocaleLayout({ children, params }: Props) {
     notFound();
   }
 
-  // Load messages for the locale
-  let messages;
-  try {
-    messages = (await import(`../../../messages/${locale}.json`)).default;
-  } catch (error) {
-    console.error(`Failed to load messages for locale ${locale}:`, error);
-    messages = (await import(`../../../messages/en.json`)).default;
-  }
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages({ locale });
 
   return (
-    <html lang={locale}>
+    <html lang={locale || "en"}>
       <body>
         <ClientProviders messages={messages} locale={locale}>
           {children}

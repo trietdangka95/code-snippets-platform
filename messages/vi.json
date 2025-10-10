@@ -21,7 +21,10 @@
     "home": "Trang chủ",
     "about": "Giới thiệu",
     "login": "Đăng nhập",
-    "myProfile": "Hồ sơ của tôi"
+    "myProfile": "Hồ sơ của tôi",
+    "hello": "Xin chào",
+    "user": "Người dùng",
+    "logout": "Đăng xuất"
   },
   "auth": {
     "login": "Đăng nhập",

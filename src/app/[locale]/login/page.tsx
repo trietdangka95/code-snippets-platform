@@ -131,7 +131,11 @@ const LoginPage = () => {
               )}
             />
 
-            <Button type="submit" variant="primary" className="w-full">
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
+            >
               <span className="flex items-center justify-center gap-2">
                 <svg
                   className="w-5 h-5"

@@ -21,7 +21,10 @@
     "home": "Home",
     "about": "About",
     "login": "Login",
-    "myProfile": "My Profile"
+    "myProfile": "My Profile",
+    "hello": "Hello",
+    "user": "User",
+    "logout": "Logout"
   },
   "auth": {
     "login": "Login",

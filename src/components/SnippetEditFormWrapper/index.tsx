@@ -13,9 +13,16 @@ type ApiSnippet = {
   user?: { id: string; name: string | null } | null;
 };
 
-const SnippetEditFormWrapper = ({ snippet }: { snippet: ApiSnippet }) => {
+const SnippetEditFormWrapper = ({
+  snippet,
+  onEditStateChange,
+}: {
+  snippet: ApiSnippet;
+  onEditStateChange?: (isEditing: boolean) => void;
+}) => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const isNotOwner = currentUserId !== snippet?.user?.id;
 
   useEffect(() => {
     let active = true;
@@ -48,23 +55,33 @@ const SnippetEditFormWrapper = ({ snippet }: { snippet: ApiSnippet }) => {
         }
         onSuccess={() => {
           setShowEditForm(false);
+          onEditStateChange?.(false);
           // Reload snippet data
           window.location.reload();
         }}
-        onCancel={() => setShowEditForm(false)}
+        onCancel={() => {
+          setShowEditForm(false);
+          onEditStateChange?.(false);
+        }}
       />
     );
+  }
+
+  // Hide the edit button if user is not the owner
+  if (isNotOwner) {
+    return null;
   }
 
   return (
     <Button
       onClick={() => {
-        if (currentUserId && currentUserId === snippet?.user?.id) {
+        if (currentUserId && !isNotOwner) {
           setShowEditForm(true);
+          onEditStateChange?.(true);
         }
       }}
-      disabled={!currentUserId || currentUserId !== snippet?.user?.id}
-      className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+      disabled={!currentUserId}
+      className="mt-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
     >
       <span className="flex items-center justify-center gap-2">
         <svg
