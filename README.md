@@ -170,5 +170,7 @@ src/
 - Security BE chưa implement(Rate limit, JWT...)
 - Chưa implement Forgot password
 - Nếu truy cập bằng mobile (chưa hiển thị tốt cho Darkmode)
+- Input code snippet and function complexity only support JS/TS syntax.
+
   **Phát triển bởi**: Triet Dang
   **Phiên bản**: 0.1.0
